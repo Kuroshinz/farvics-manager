@@ -21,10 +21,10 @@ export default function DashboardPage() {
       
       {/* Metrics Row - Bounded Masonry Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-        <MetricCard title="Total Revenue" amount="$124,500.00" trend="+12.5%" isPositive={true} icon={Wallet} delay={0.1} />
-        <MetricCard title="Monthly Expenses" amount="$42,100.00" trend="-4.2%" isPositive={false} icon={TrendingDown} delay={0.2} />
-        <MetricCard title="Net Profit" amount="$82,400.00" trend="+18.1%" isPositive={true} icon={LayoutDashboard} delay={0.3} />
-        <MetricCard title="Cash Runway" amount="18 Months" trend="Stable" isPositive={true} icon={Coins} delay={0.4} />
+        <MetricCard title="Total Revenue" amount="$124,500.00" trend="+12.5%" isPositive={true} icon={<Wallet size={18} strokeWidth={1.5} />} delay={0.1} />
+        <MetricCard title="Monthly Expenses" amount="$42,100.00" trend="-4.2%" isPositive={false} icon={<TrendingDown size={18} strokeWidth={1.5} />} delay={0.2} />
+        <MetricCard title="Net Profit" amount="$82,400.00" trend="+18.1%" isPositive={true} icon={<LayoutDashboard size={18} strokeWidth={1.5} />} delay={0.3} />
+        <MetricCard title="Cash Runway" amount="18 Months" trend="Stable" isPositive={true} icon={<Coins size={18} strokeWidth={1.5} />} delay={0.4} />
       </div>
 
       {/* Main Feature Row */}
@@ -48,3 +48,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+

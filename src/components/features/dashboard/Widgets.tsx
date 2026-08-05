@@ -7,14 +7,14 @@ import { GlassPanel } from '../../ui/glass-panel/GlassPanel';
 import { cn } from '../../../lib/utils';
 
 // Shared Metrics Card
-export function MetricCard({ title, amount, trend, isPositive, icon: Icon, delay = 0 }: any) {
+export function MetricCard({ title, amount, trend, isPositive, icon, delay = 0 }: any) {
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay }}>
       <GlassPanel className="p-6 h-full flex flex-col justify-between group overflow-hidden">
         <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/[0.02] rounded-full blur-2xl group-hover:bg-white/[0.04] transition-colors" />
         <div className="flex justify-between items-start mb-4 relative z-10">
           <div className="p-2 rounded-xl bg-white/5 border border-white/10 text-content-secondary group-hover:text-white transition-colors">
-            <Icon size={18} strokeWidth={1.5} />
+            {icon}
           </div>
           <div className={cn("flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-md", isPositive ? "bg-aurora-green/10 text-aurora-green" : "bg-galaxy-red/10 text-galaxy-red")}>
             {isPositive ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
@@ -110,3 +110,5 @@ export function ActivityTimeline() {
     </GlassPanel>
   );
 }
+
+

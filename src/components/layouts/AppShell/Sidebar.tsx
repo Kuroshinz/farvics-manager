@@ -1,124 +1,105 @@
 'use client';
 import * as React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Home, PieChart, Wallet, Target, Settings, AlignLeft, Activity } from 'lucide-react';
+import { LayoutDashboard, ArrowRightLeft, BookOpen, PieChart, Users, Settings, ChevronRight, Wallet, Target } from 'lucide-react';
 import { cn } from '../../../lib/utils';
 import { Typography } from '../../ui/typography/Typography';
+import { motion, AnimatePresence } from 'framer-motion';
+import { WorkspaceSwitcher } from '../../features/workspace-switcher/WorkspaceSwitcher';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface SidebarProps {
   collapsed: boolean;
   onToggle: () => void;
 }
 
-const NAV_ITEMS = [
-  { icon: Home, label: 'Dashboard', href: '/' },
-  { icon: Wallet, label: 'Financials', href: '/financial' },
-  { icon: PieChart, label: 'Reporting', href: '/reports' },
-  { icon: Target, label: 'Objectives', href: '/goals' },
-  { icon: Activity, label: 'Analytics', href: '/analytics' },
+const navItems = [
+  { icon: LayoutDashboard, label: 'Overview', href: '/' },
+  { icon: Wallet, label: 'Accounts', href: '/accounts' },
+  { icon: ArrowRightLeft, label: 'Transactions', href: '/transactions' },
+  { icon: BookOpen, label: 'Journals', href: '/journals' },
+  { icon: PieChart, label: 'Budgets', href: '/budgets' },
+  { icon: Target, label: 'Goals', href: '/goals' },
 ];
 
-import { WorkspaceSwitcher } from '../../features/workspace-switcher/WorkspaceSwitcher';
-
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
+  const pathname = usePathname();
+  
   return (
     <motion.aside
       initial={false}
-      animate={{ width: collapsed ? 88 : 280 }}
-      transition={{ type: 'spring', stiffness: 350, damping: 35 }}
-      className="relative z-20 flex h-full flex-col bg-transparent md:bg-transparent"
+      animate={{ width: collapsed ? 80 : 280 }}
+      className="hidden md:flex flex-col h-[calc(100vh-2rem)] rounded-3xl border border-white/5 bg-surface/40 backdrop-blur-3xl shadow-[0_0_80px_rgba(0,0,0,0.3)] z-40 my-4 ml-4"
     >
-      <div className="flex h-24 items-center justify-between px-6">
-        <AnimatePresence mode="wait">
-          {!collapsed ? (
-            <motion.div 
-              key="full"
-              initial={{ opacity: 0, x: -10 }} 
-              animate={{ opacity: 1, x: 0 }} 
-              exit={{ opacity: 0, x: -10, transition: { duration: 0.1 } }}
-              className="flex items-center gap-3 overflow-hidden cursor-pointer group"
-            >
-              <div className="h-10 w-10 rounded-2xl bg-gradient-galaxy shadow-[0_0_20px_rgba(219,39,119,0.3)] flex items-center justify-center relative overflow-hidden group-hover:shadow-[0_0_30px_rgba(219,39,119,0.6)] transition-shadow duration-500">
-                 <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                 <span className="text-white font-bold text-lg tracking-tighter relative z-10">F</span>
-              </div>
-              <div className="flex flex-col">
-                 <Typography variant="h3" className="text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70">
-                   Farvics
-                 </Typography>
-                 <span className="text-[10px] font-medium tracking-widest text-aurora-cyan uppercase opacity-80">Manager</span>
-              </div>
-            </motion.div>
-          ) : (
-            <motion.div 
-              key="icon"
-              initial={{ opacity: 0, scale: 0.8 }} 
-              animate={{ opacity: 1, scale: 1 }} 
-              exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.1 } }}
-              className="mx-auto h-10 w-10 rounded-2xl bg-gradient-galaxy shadow-[0_0_20px_rgba(219,39,119,0.3)] flex items-center justify-center cursor-pointer"
-              onClick={onToggle}
-            >
-               <span className="text-white font-bold text-lg tracking-tighter">F</span>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      <div className="px-4 pt-4"><WorkspaceSwitcher collapsed={collapsed} /></div>
-      <nav className="flex-1 space-y-2 px-4 py-6">
-        {NAV_ITEMS.map((item, i) => (
-          <a
-            key={i}
-            href={item.href}
-            className={cn(
-              "group relative flex items-center rounded-2xl px-4 py-3 text-content-secondary transition-all duration-300",
-              "hover:text-white"
-            )}
-          >
-            <item.icon size={22} className="shrink-0 relative z-10 drop-shadow-md transition-transform group-hover:scale-110 group-hover:text-white duration-300" strokeWidth={1.5} />
-            <AnimatePresence>
-              {!collapsed && (
-                <motion.span 
-                  initial={{ opacity: 0, filter: 'blur(4px)', x: -10 }} 
-                  animate={{ opacity: 1, filter: 'blur(0px)', x: 0 }} 
-                  exit={{ opacity: 0, filter: 'blur(4px)', x: -10 }}
-                  className="ml-4 text-[15px] font-medium tracking-wide relative z-10"
-                >
-                  {item.label}
-                </motion.span>
-              )}
-            </AnimatePresence>
-            {/* Extremely soft internal glass hover effect */}
-            <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity bg-white/[0.04] border border-white/[0.05] pointer-events-none scale-95 group-hover:scale-100 duration-300 ease-out shadow-[inset_0_0_12px_rgba(255,255,255,0.02)]" />
-          </a>
-        ))}
-      </nav>
-
-      {/* Action Area & Profile */}
-      <div className="p-4 mt-auto space-y-4">
-        <button
-          onClick={onToggle}
-          className="w-full flex items-center justify-center gap-2 rounded-2xl px-4 py-3 text-content-secondary hover:text-white hover:bg-white/5 transition-colors border border-transparent hover:border-white/5"
-        >
-          <AlignLeft size={20} strokeWidth={1.5} className={cn("transition-transform duration-500", collapsed && "rotate-180")} />
-          {!collapsed && <span className="text-sm font-medium">Collapse</span>}
-        </button>
-
-        <div className={cn("flex items-center gap-3 rounded-2xl p-2 transition-colors hover:bg-white/5 cursor-pointer border border-transparent hover:border-white/5", collapsed && "justify-center")}>
-          <div className="h-10 w-10 shrink-0 rounded-full bg-gradient-to-br from-aurora-cyan to-galaxy-purple p-[2px] shadow-lg">
-            <div className="h-full w-full rounded-full bg-background flex items-center justify-center">
-              <span className="text-xs font-bold text-white tracking-wider">AD</span>
-            </div>
+      <div className="flex h-24 shrink-0 items-center justify-between px-6">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-galaxy shadow-lg ring-1 ring-white/20">
+            <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
           </div>
-          {!collapsed && (
-            <div className="flex flex-col overflow-hidden">
-              <span className="truncate text-sm font-semibold text-white">Administrator</span>
-              <span className="truncate text-[11px] font-medium text-content-muted">Farvics HQ</span>
-            </div>
-          )}
+          <AnimatePresence>
+            {!collapsed && (
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -10 }}
+                className="overflow-hidden"
+              >
+                <Typography variant="h3" className="whitespace-nowrap tracking-wider">FARVICS</Typography>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
+      </div>
+      
+      <div className="px-4 pt-4">
+        <WorkspaceSwitcher collapsed={collapsed} />
+      </div>
+      
+      <nav className="flex-1 space-y-2 px-4 py-6 overflow-y-auto hide-scrollbar">
+        {navItems.map((item) => {
+          const isActive = pathname === item.href;
+          return (
+            <Link key={item.label} href={item.href}>
+              <div
+                className={cn(
+                  "group flex items-center gap-3 rounded-2xl px-3 py-3 transition-all cursor-pointer relative",
+                  isActive
+                    ? "bg-white/10 text-white shadow-inner"
+                    : "text-content-secondary hover:bg-white/[0.04] hover:text-white"
+                )}
+                title={collapsed ? item.label : undefined}
+              >
+                {isActive && (
+                  <motion.div layoutId="activeNav" className="absolute inset-0 rounded-2xl bg-white/5 border border-white/10" transition={{ type: "spring", stiffness: 300, damping: 30 }} />
+                )}
+                <div className="relative z-10 flex items-center gap-3 w-full">
+                  <div className={cn("transition-colors", isActive ? "text-aurora-cyan" : "text-content-muted group-hover:text-white")}>
+                     <item.icon size={18} strokeWidth={1.5} />
+                  </div>
+                  <AnimatePresence>
+                    {!collapsed && (
+                      <motion.span
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -10 }}
+                        className="whitespace-nowrap font-medium text-sm tracking-wide"
+                      >
+                        {item.label}
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </div>
+            </Link>
+          );
+        })}
+      </nav>
+      
+      <div className="p-4 border-t border-white/5 mt-auto">
+        {/* User Profile Block */}
       </div>
     </motion.aside>
   );
 }
-

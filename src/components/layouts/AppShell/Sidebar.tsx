@@ -18,6 +18,8 @@ const NAV_ITEMS = [
   { icon: Activity, label: 'Analytics', href: '/analytics' },
 ];
 
+import { WorkspaceSwitcher } from '../../features/workspace-switcher/WorkspaceSwitcher';
+
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   return (
     <motion.aside
@@ -62,6 +64,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         </AnimatePresence>
       </div>
 
+      <div className="px-4 pt-4"><WorkspaceSwitcher collapsed={collapsed} /></div>
       <nav className="flex-1 space-y-2 px-4 py-6">
         {NAV_ITEMS.map((item, i) => (
           <a
@@ -118,3 +121,4 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
     </motion.aside>
   );
 }
+

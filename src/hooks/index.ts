@@ -1,3 +1,4 @@
+'use client';
 import { useState, useEffect } from 'react';
 
 export function useMediaQuery(query: string): boolean {
@@ -20,4 +21,35 @@ export function useDisclosure(initialState = false) {
   const close = () => setIsOpen(false);
   const toggle = () => setIsOpen(prev => !prev);
   return { isOpen, open, close, toggle };
+}
+
+export function useNetworkStatus() {
+  const [isOnline, setIsOnline] = useState(true);
+
+  useEffect(() => {
+    setIsOnline(navigator.onLine);
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  return isOnline;
+}
+
+export function useKeyboardShortcut(key: string, ctrlOrMeta: boolean, callback: () => void) {
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() === key.toLowerCase() && (!ctrlOrMeta || (e.ctrlKey || e.metaKey))) {
+        e.preventDefault();
+        callback();
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [key, ctrlOrMeta, callback]);
 }

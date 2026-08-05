@@ -5,6 +5,8 @@ import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
 import { MobileNav } from './MobileNav';
 import { CommandPalette } from '../../features/command-palette/CommandPalette';
+import { OfflineBanner } from './OfflineBanner';
+import { RouteTransition } from './RouteTransition';
 import { useMediaQuery } from '../../../hooks';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -25,10 +27,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="relative flex h-screen w-screen overflow-hidden bg-background text-content-primary md:p-4 md:gap-4">
+      <OfflineBanner />
       {/* Immersive Deep Space Ambient Lighting */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-galaxy-purple/10 rounded-full blur-[160px] animate-pulse-slow" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[60%] bg-aurora-blue/10 rounded-full blur-[160px] animate-pulse-slow" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-galaxy-purple/10 rounded-full blur-[160px] animate-pulse-slow transform-gpu will-change-transform" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[60%] bg-aurora-blue/10 rounded-full blur-[160px] animate-pulse-slow transform-gpu will-change-transform" style={{ animationDelay: '2s' }} />
       </div>
 
       {!isMobile && (
@@ -48,7 +51,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="mx-auto max-w-7xl h-full"
           >
-            {children}
+            <RouteTransition>{children}</RouteTransition>
           </motion.div>
         </main>
       </div>
@@ -63,3 +66,4 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
+

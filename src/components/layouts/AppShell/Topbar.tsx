@@ -1,6 +1,7 @@
 'use client';
 import * as React from 'react';
-import { Search, Bell, Command, Settings2 } from 'lucide-react';
+import { Search, Command, Settings2 } from 'lucide-react';
+import { NotificationCenter } from '../../features/notifications/NotificationCenter';
 import { motion } from 'framer-motion';
 
 export function Topbar({ onOpenCommandPalette }: { onOpenCommandPalette: () => void }) {
@@ -35,10 +36,7 @@ export function Topbar({ onOpenCommandPalette }: { onOpenCommandPalette: () => v
 
           <div className="h-6 w-px bg-white/10 hidden sm:block" />
 
-          <button className="relative p-2 text-content-muted hover:text-white transition-colors hover:bg-white/5 rounded-xl">
-            <Bell size={22} strokeWidth={1.5} />
-            <span className="absolute top-2 right-2.5 h-2 w-2 rounded-full bg-galaxy-pink shadow-[0_0_12px_rgba(219,39,119,0.9)] border border-background" />
-          </button>
+          <NotificationCenter />
           
           <button className="relative p-2 text-content-muted hover:text-white transition-colors hover:bg-white/5 rounded-xl">
             <Settings2 size={22} strokeWidth={1.5} />

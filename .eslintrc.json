@@ -1,0 +1,60 @@
+{
+  "extends": [
+    "next/core-web-vitals"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "src/modules/*/domain/**/*",
+        "src/modules/*/application/**/*"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@modules/*/infrastructure/*"
+                ],
+                "message": "Hexagonal Violation: Domain/Application cannot import Infrastructure."
+              },
+              {
+                "group": [
+                  "@modules/*/presentation/*"
+                ],
+                "message": "Hexagonal Violation: Domain/Application cannot import Presentation."
+              },
+              {
+                "group": [
+                  "@app/*"
+                ],
+                "message": "Dependency Violation: Modules cannot depend on the App composition root."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/*/infrastructure/**/*"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@modules/*/presentation/*"
+                ],
+                "message": "Hexagonal Violation: Infrastructure cannot import Presentation."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

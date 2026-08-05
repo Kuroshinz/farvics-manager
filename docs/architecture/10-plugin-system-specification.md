@@ -1,4 +1,4 @@
-# AURA.MONEY - Plugin System Specification
+# Farvics Manager - Plugin System Specification
 
 ## 1. V1 Architecture (Current)
 - Compile-time inclusion only.
@@ -8,3 +8,4 @@
 ## 2. V2 Architecture (Future Category C)
 - Marketplace readiness via WebAssembly (Wasm) or V8 Isolates.
 - Strict iframe sandboxing for UI widgets.
+

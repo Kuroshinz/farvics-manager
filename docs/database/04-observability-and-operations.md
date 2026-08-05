@@ -1,4 +1,4 @@
-# AURA.MONEY - Database Observability & Operations Standards
+# Farvics Manager - Database Observability & Operations Standards
 
 This document establishes the operational standards for the database platform. It defines how the database is monitored, maintained, audited, and operated in production environments.
 
@@ -91,3 +91,4 @@ The operational standard is complete and active when:
 - Performance expectations (latency, pagination) are rigidly defined.
 - Audit requirements are explicit and immutable.
 - The platform is operationally prepared for production deployment.
+

@@ -1,4 +1,4 @@
-# AURA.MONEY - Database Design Review Checklist
+# Farvics Manager - Database Design Review Checklist
 
 This document is the mandatory Engineering Constitution checklist for all schema changes. No database table or migration may be merged unless it strictly satisfies every checklist item. 
 
@@ -98,3 +98,4 @@ This document is the mandatory Engineering Constitution checklist for all schema
 - [ ] Mutation triggers corresponding Outbox Events if part of an Aggregate Root.
 - [ ] Migration uses safe DDL (avoids full table locks on large tables).
 ```
+

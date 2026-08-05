@@ -1,6 +1,6 @@
-# AURA.MONEY - Database Migration & Governance Strategy
+# Farvics Manager - Database Migration & Governance Strategy
 
-This document establishes the permanent standard for every database change in AURA.MONEY.
+This document establishes the permanent standard for every database change in Farvics Manager.
 
 ## 01 Migration Strategy
 - **Lifecycle:** 
@@ -88,3 +88,4 @@ The governance strategy is active and complete when:
 - CI automatically enforces and validates every migration.
 - Database ownership is explicit and isolated.
 - SQL conventions are permanently frozen.
+

@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { SupabaseAccountRepository } from '../../../modules/financial/infrastructure/repositories/SupabaseAccountRepository';
 import { SupabaseUnitOfWork } from '../uow/SupabaseUnitOfWork';
 
@@ -7,8 +8,10 @@ describe('Repository Contracts', () => {
   });
 
   it('should enforce UnitOfWork operation batching', async () => {
-    const uow = new SupabaseUnitOfWork({} as any, {} as any, {} as any);
+    const mockPgResource = { name: 'pg', begin: vi.fn(), commit: vi.fn(), rollback: vi.fn(), registerOperation: vi.fn(), getOperationsCount: vi.fn() } as any;
+    const uow = new SupabaseUnitOfWork(mockPgResource, {} as any, {} as any);
     await uow.begin();
-    expect(true).toBe(true);
+    expect(mockPgResource.begin).toHaveBeenCalled();
   });
 });
+

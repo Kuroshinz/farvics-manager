@@ -1,4 +1,4 @@
-# AURA.MONEY - Platform Capability Map
+# Farvics Manager - Platform Capability Map
 
 ## 1. Observability (Category A)
 - **Owner**: Platform Team
@@ -9,3 +9,4 @@
 
 ## 3. Projection Rebuild Engine (Category B)
 - **Capabilities**: Replay retained events from the Outbox (based on configurable retention window).
+

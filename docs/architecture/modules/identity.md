@@ -1,7 +1,7 @@
 # Module: Identity
 
 ## 1. Responsibilities
-The Identity module is the foundational root of the AURA.MONEY platform. It handles:
+The Identity module is the foundational root of the Farvics Manager platform. It handles:
 - User authentication synchronization from Supabase Auth.
 - Core profile management (first name, last name).
 - Providing the `user_id` context required by every other module for multi-tenancy and ownership isolation.
@@ -25,3 +25,4 @@ The Identity module is the foundational root of the AURA.MONEY platform. It hand
 
 ## 6. Public Contracts
 The Identity module exposes the `IUserRepository` for dependency injection and domain boundary interactions.
+

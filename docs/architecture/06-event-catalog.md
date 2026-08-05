@@ -1,4 +1,4 @@
-# AURA.MONEY - Event Catalog
+# Farvics Manager - Event Catalog
 
 ## Universal Event Metadata
 All events strictly require:
@@ -9,3 +9,4 @@ All events strictly require:
 ## 1. `TransactionCreated`
 - **Aggregate**: `Transaction`
 - **Payload**: `{ transactionId, accountId, amount, currency }`
+

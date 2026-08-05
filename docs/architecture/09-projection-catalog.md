@@ -1,4 +1,4 @@
-# AURA.MONEY - Projection Catalog
+# Farvics Manager - Projection Catalog
 
 ## 1. Cash Flow Projection
 - **Purpose**: Dashboard charts.
@@ -6,3 +6,4 @@
 
 ## 2. Monthly Summary Projection
 - **Purpose**: Fast rendering of month-over-month comparisons.
+

@@ -1,31 +1,32 @@
+import { vi } from 'vitest';
 import { SupabaseUserRepository } from '../infrastructure/SupabaseUserRepository';
 import { User } from '../domain/User';
 import { UserId, Email, DisplayName } from '../domain/ValueObjects';
 import { IdentityErrors } from '../domain/Errors';
 
 // Mock Supabase client
-const mockSupabase = {
-  from: jest.fn().mockReturnThis(),
-  select: jest.fn().mockReturnThis(),
-  update: jest.fn().mockReturnThis(),
-  eq: jest.fn().mockReturnThis(),
-  is: jest.fn().mockReturnThis(),
-  single: jest.fn(),
-};
+const mockSupabase: any = {};
+mockSupabase.from = vi.fn().mockReturnValue(mockSupabase);
+mockSupabase.select = vi.fn().mockReturnValue(mockSupabase);
+mockSupabase.update = vi.fn().mockReturnValue(mockSupabase);
+mockSupabase.insert = vi.fn().mockReturnValue(mockSupabase);
+mockSupabase.eq = vi.fn().mockReturnValue(mockSupabase);
+mockSupabase.is = vi.fn().mockReturnValue(mockSupabase);
+mockSupabase.single = vi.fn();
 
 describe('SupabaseUserRepository Integration', () => {
   let repo: SupabaseUserRepository;
 
   beforeEach(() => {
     repo = new SupabaseUserRepository(mockSupabase as any);
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should find a user by ID', async () => {
     mockSupabase.single.mockResolvedValueOnce({
       data: {
         id: '123e4567-e89b-12d3-a456-426614174000',
-        email: 'test@aura.money',
+        email: 'test@farvics.com',
         first_name: 'John',
         last_name: 'Doe',
         created_at: new Date().toISOString(),
@@ -39,7 +40,7 @@ describe('SupabaseUserRepository Integration', () => {
     const user = await repo.findById(new UserId('123e4567-e89b-12d3-a456-426614174000'));
     
     expect(user).toBeDefined();
-    expect(user?.email.value).toBe('test@aura.money');
+    expect(user?.email.value).toBe('test@farvics.com');
     expect(user?.firstName?.value).toBe('John');
   });
 
@@ -47,7 +48,7 @@ describe('SupabaseUserRepository Integration', () => {
     // Setup initial user state
     const user = User.create({
       id: new UserId('123e4567-e89b-12d3-a456-426614174000'),
-      email: new Email('test@aura.money'),
+      email: new Email('test@farvics.com'),
       firstName: new DisplayName('John'),
       lastName: new DisplayName('Doe'),
       createdAt: new Date(),
@@ -58,7 +59,7 @@ describe('SupabaseUserRepository Integration', () => {
 
     user.updateProfile('Jane', 'Doe');
 
-    mockSupabase.eq.mockResolvedValueOnce({ error: null, count: 1 });
+    mockSupabase.eq.mockReturnValueOnce(mockSupabase).mockReturnValueOnce(Promise.resolve({ error: null, count: 1 } as any));
 
     await repo.save(user);
 
@@ -68,3 +69,11 @@ describe('SupabaseUserRepository Integration', () => {
     }));
   });
 });
+
+
+
+
+
+
+
+

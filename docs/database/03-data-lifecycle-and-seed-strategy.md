@@ -1,4 +1,4 @@
-# AURA.MONEY - Data Lifecycle & Seed Strategy
+# Farvics Manager - Data Lifecycle & Seed Strategy
 
 This document establishes the permanent data lifecycle strategy governing how data is created, seeded, migrated, refreshed, anonymized, archived, restored, and destroyed across all environments.
 
@@ -57,7 +57,7 @@ All generated synthetic data MUST be deterministic (e.g., using a fixed seed in 
 If production data must be exported for debugging or staging, it must pass through a strict anonymization pipeline.
 The following must be completely masked, hashed, or replaced:
 - **Names:** Replaced with synthetic names.
-- **Emails:** Replaced with `<uuid>@anonymized.aura.money`.
+- **Emails:** Replaced with `<uuid>@anonymized.Farvics Manager`.
 - **Phone Numbers:** Replaced with dummy numbers.
 - **Tokens/Secrets:** Completely dropped or replaced with test keys.
 - **Identifiers:** National IDs, tax numbers replaced.
@@ -84,3 +84,4 @@ The Data Lifecycle Strategy is active and complete when:
 - Production data is completely insulated from lower environments.
 - Test data is 100% reproducible.
 - Engineers use automated scripts instead of manually inventing seeding rules.
+

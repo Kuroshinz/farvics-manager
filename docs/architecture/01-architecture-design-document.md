@@ -1,4 +1,4 @@
-# AURA.MONEY - Architecture Design Document (ADD)
+# Farvics Manager - Architecture Design Document (ADD)
 
 ## 1. Vision
 Build a long-term AI Financial Platform supporting millions of users, while maintaining pragmatic, modular engineering.
@@ -27,3 +27,4 @@ To prevent recursive automation triggers, the event bus implements:
 
 ## 6. Observability (Category A)
 First-class platform capability including Structured Logging, Distributed Trace IDs, Metrics, and Audit Trails.
+

@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-AURA.MONEY relies on Supabase Auth for identity management, which natively manages credentials and sessions inside the `auth.users` table. However, Supabase enforces a strict boundary: the `auth` schema cannot be easily joined, queried, or modified by application business logic via the API, nor can it hold rich domain-specific aggregate data (like budgets, profiles, etc.).
+Farvics Manager relies on Supabase Auth for identity management, which natively manages credentials and sessions inside the `auth.users` table. However, Supabase enforces a strict boundary: the `auth` schema cannot be easily joined, queried, or modified by application business logic via the API, nor can it hold rich domain-specific aggregate data (like budgets, profiles, etc.).
 
 We need a way to link domain entities (like Accounts or Transactions) to authenticated users while maintaining strict domain boundaries, and we need to query user profiles securely.
 
@@ -25,3 +25,4 @@ We need a way to link domain entities (like Accounts or Transactions) to authent
 **Cons:**
 - Eventual consistency risks if triggers fail (mitigated by transactional guarantees within Postgres).
 - Slight data duplication (e.g., `email`).
+

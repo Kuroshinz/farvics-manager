@@ -1,4 +1,4 @@
-# AURA.MONEY Phase 1 - Implementation Blueprint
+# Farvics Manager Phase 1 - Implementation Blueprint
 
 ## 1. Repository Tree
 
@@ -111,3 +111,4 @@ Every wave must pass the following before moving to the next:
 - **Typed Interfaces**: `any` is strictly prohibited.
 - **Documentation**: JSDoc required for all exported interfaces and Server Actions.
 - **No Dead Code**: Remove all unused imports.
+

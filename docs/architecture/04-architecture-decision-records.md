@@ -1,4 +1,4 @@
-# AURA.MONEY - Architecture Decision Records (ADR)
+# Farvics Manager - Architecture Decision Records (ADR)
 
 ## ADR 001: Modular Monolith vs Microservices
 **Decision**: Modular Monolith.
@@ -7,3 +7,4 @@
 ## ADR 002: Transactional Outbox for Events
 **Decision**: Use Transactional Outbox.
 **Reasoning**: Prevents dual-write failures. DB transaction guarantees event is persisted.
+

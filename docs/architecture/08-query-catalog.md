@@ -1,4 +1,4 @@
-# AURA.MONEY - Query Catalog
+# Farvics Manager - Query Catalog
 
 ## 1. `GetAccountBalanceQuery`
 - **Read Model**: `AccountBalanceProjection`
@@ -7,3 +7,4 @@
 ## 2. `ListTransactionsQuery`
 - **Pagination**: Keyset/Cursor based.
 - **Sorting**: Date DESC.
+

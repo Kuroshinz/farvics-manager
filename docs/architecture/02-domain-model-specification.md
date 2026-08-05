@@ -1,4 +1,4 @@
-# AURA.MONEY - Domain Model Specification (DMS)
+# Farvics Manager - Domain Model Specification (DMS)
 
 ## 1. Ledger Context
 - **Aggregate Roots**: `Account` (includes `version`, `updatedAt`), `Transaction` (includes `version`, `updatedAt`)
@@ -8,3 +8,4 @@
 ## 2. Automation Context
 - **Aggregate Roots**: `Rule` (includes `version`, `updatedAt`)
 - **Domain Policies**: Circuit breakers applied per rule execution graph to prevent infinite loops.
+

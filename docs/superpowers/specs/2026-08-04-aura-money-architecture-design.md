@@ -1,7 +1,7 @@
-# AURA.MONEY Architecture Design Document (ADD)
+# Farvics Manager Architecture Design Document (ADD)
 
 ## 1. Executive Summary
-AURA.MONEY is an enterprise-grade, AI-powered personal finance platform. This document defines the Phase 0 foundational architecture. The system is designed to be highly scalable, modular, and extensible, ensuring that future capabilities (AI, Automation, Analytics) can integrate seamlessly without architectural rewrites.
+Farvics Manager is an enterprise-grade, AI-powered personal finance platform. This document defines the Phase 0 foundational architecture. The system is designed to be highly scalable, modular, and extensible, ensuring that future capabilities (AI, Automation, Analytics) can integrate seamlessly without architectural rewrites.
 
 ### Core Principles
 1. **Platform First:** Build reusable foundational capabilities before business logic.
@@ -41,7 +41,7 @@ A dedicated `src/platform/` layer provides cross-cutting capabilities that any b
 
 ## 3. Event-Driven Architecture (EDA)
 
-The core of AURA.MONEY's extensibility is its EDA, powered by the **Transactional Outbox Pattern**.
+The core of Farvics Manager's extensibility is its EDA, powered by the **Transactional Outbox Pattern**.
 
 ### 3.1 Event Lifecycle
 1.  **Commit:** A business transaction successfully updates business tables and inserts a serialized event into the `outbox_events` table in the *same database transaction*.
@@ -118,3 +118,4 @@ aura-money/
     *   *Unit Tests (Vitest):* Heavy coverage on `domain/` and `application/` layers.
     *   *Integration Tests:* Validating `infrastructure/` adapters against Supabase local instances.
     *   *E2E Tests (Playwright):* Happy path user flows traversing the `app/` composition root.
+

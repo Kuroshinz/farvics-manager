@@ -1,4 +1,4 @@
-# AURA.MONEY - Database Standards & Naming Convention
+# Farvics Manager - Database Standards & Naming Convention
 
 This document represents the frozen single source of truth for all database structural and naming conventions. All future schema migrations MUST adhere strictly to these rules.
 
@@ -123,3 +123,4 @@ Canonical terms – no synonyms allowed:
 5. Explicit Ownership: Modules strictly own their schemas.
 6. Predictable Relationships: Strict adherence to FK boundaries.
 7. Deterministic Migrations: All migrations must execute safely from a blank state.
+

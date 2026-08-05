@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "AURA.FIT | Enterprise Financial Intelligence",
+  title: "Farvics Manager | Enterprise Financial Intelligence",
   description: "AI-powered financial domain engine.",
 };
 
@@ -28,3 +28,4 @@ export default function RootLayout({
     </html>
   );
 }
+

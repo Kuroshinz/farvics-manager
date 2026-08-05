@@ -1,4 +1,4 @@
-# AURA.MONEY - Architecture Change Log
+# Farvics Manager - Architecture Change Log
 
 ## 1. Automation Loop Protection
 - **Status**: ACCEPTED (Category A - Mandatory)
@@ -24,3 +24,4 @@
 - **Status**: PARTIALLY ACCEPTED (Category B - Required Before Prod)
 - **Rationale**: Building a Wasm sandbox is too complex for V1.
 - **Impact**: V1 supports only compiled, trusted, first-party plugins. Interfaces are designed for future sandbox migration (Category C).
+

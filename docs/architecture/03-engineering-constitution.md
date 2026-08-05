@@ -1,4 +1,4 @@
-# AURA.MONEY - Engineering Constitution
+# Farvics Manager - Engineering Constitution
 
 ## 1. Coding Standards
 - Strict TypeScript (no `any`).
@@ -16,3 +16,4 @@
 - Conventional Commits (`feat:`, `fix:`, `chore:`).
 - Branch strategy: `feature/*`, `bugfix/*`.
 - No direct commits to `main`.
+

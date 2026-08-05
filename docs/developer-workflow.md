@@ -1,6 +1,6 @@
-# AURA.MONEY - Developer Platform & Workflow
+# Farvics Manager - Developer Platform & Workflow
 
-This document defines the permanent local development platform and workflow for AURA.MONEY. It guarantees a reproducible, deterministic environment for all engineers and AI agents.
+This document defines the permanent local development platform and workflow for Farvics Manager. It guarantees a reproducible, deterministic environment for all engineers and AI agents.
 
 ## 01 Development Workflow
 The standard path from clone to productive contribution:
@@ -100,3 +100,4 @@ The Developer Platform is now active because:
 - Setup is fully reproducible via standard scripts.
 - Health checks automatically prevent bad states.
 - Engineers and AI rely entirely on `package.json` scripts rather than inventing their own terminal commands.
+

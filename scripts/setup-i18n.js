@@ -1,0 +1,153 @@
+const fs = require('fs');
+const path = require('path');
+
+const en = {
+  "nav.overview": "Overview",
+  "nav.accounts": "Accounts",
+  "nav.transactions": "Transactions",
+  "nav.journals": "Journals",
+  "nav.budgets": "Budgets",
+  "nav.goals": "Goals",
+  "nav.categories": "Categories",
+  "nav.exchange_rates": "Exchange Rates",
+  "nav.reports": "Reports",
+  "nav.reconciliation": "Reconciliation",
+  "common.search": "Command Center...",
+  "common.no_records": "No records found.",
+  "common.loading": "Loading...",
+  "common.farvics_hq": "Farvics HQ",
+  "common.financial": "Financial",
+  "common.dashboards": "Dashboards",
+  "common.operational": "Operational",
+  "actions.create": "Create",
+  "actions.edit": "Edit",
+  "actions.delete": "Delete",
+  "actions.cancel": "Cancel",
+  "actions.save": "Save",
+  "actions.confirm": "Confirm",
+  "actions.view_details": "View Details",
+  "actions.generate_report": "Generate Report",
+  "dashboard.title": "Command Center",
+  "dashboard.desc": "Enterprise liquidity flows and AI-driven projections in real-time.",
+  "dashboard.revenue": "Total Revenue",
+  "dashboard.expenses": "Monthly Expenses",
+  "dashboard.profit": "Net Profit",
+  "dashboard.runway": "Cash Runway",
+  "dashboard.stable": "Stable",
+  "dashboard.ai_insight_title": "Farvics Intelligence",
+  "dashboard.ai_insight_desc": "Operational runway has extended by 14 days based on current MRR trajectory. Consider allocating surplus to Q3 marketing initiatives.",
+  "dashboard.execute_allocation": "Execute Allocation",
+  "dashboard.recent_ledger": "Recent Ledger",
+  "dashboard.view_all": "View All",
+  "dashboard.action_timeline": "Action Timeline",
+  "dashboard.cash_flow_velocity": "Cash Flow Velocity",
+  "page.accounts.title": "Accounts Directory",
+  "page.accounts.desc": "Centralized registry of all enterprise financial accounts and current balances.",
+  "page.transactions.title": "Transaction Ledger",
+  "page.transactions.desc": "Immutable ledger of all incoming and outgoing capital flows.",
+  "page.journals.title": "Journal Entries",
+  "page.journals.desc": "Double-entry accounting records and reconciliation batches.",
+  "page.budgets.title": "Budget Allocation",
+  "page.budgets.desc": "Departmental and project-based capital allocation tracking.",
+  "page.goals.title": "Capital Goals",
+  "page.goals.desc": "Strategic runway targets and reserve milestone tracking.",
+  "page.categories.title": "Expense Categories",
+  "page.categories.desc": "Chart of accounts and categorization matrix.",
+  "page.exchange_rates.title": "Exchange Rates",
+  "page.exchange_rates.desc": "Live foreign exchange markers and translation values.",
+  "page.reports.title": "Financial Reports",
+  "page.reports.desc": "Generated historical statements and predictive models.",
+  "page.reconciliation.title": "Reconciliation",
+  "page.reconciliation.desc": "Bank statement matching and integrity verifications.",
+  "cmd.smart_suggestions": "Smart Suggestions",
+  "cmd.record_tx": "Record Transaction",
+  "cmd.record_tx_desc": "Log a new expense or income",
+  "cmd.view_analytics": "View Analytics",
+  "cmd.view_analytics_desc": "Check this month's cash flow",
+  "cmd.powered_by": "Powered by Farvics AI"
+};
+
+const vi = {
+  "nav.overview": "B?ng di?u khi?n",
+  "nav.accounts": "Tài kho?n",
+  "nav.transactions": "Giao d?ch",
+  "nav.journals": "S? nh?t ký",
+  "nav.budgets": "Ngân sách",
+  "nav.goals": "M?c tiêu",
+  "nav.categories": "Danh m?c",
+  "nav.exchange_rates": "T? giá",
+  "nav.reports": "Báo cáo",
+  "nav.reconciliation": "Ð?i soát",
+  "common.search": "B?ng l?nh...",
+  "common.no_records": "Chua có d? li?u.",
+  "common.loading": "Ðang t?i...",
+  "common.farvics_hq": "Tr? s? Farvics",
+  "common.financial": "Tài chính",
+  "common.dashboards": "B?ng di?u khi?n",
+  "common.operational": "Ho?t d?ng",
+  "actions.create": "T?o m?i",
+  "actions.edit": "Ch?nh s?a",
+  "actions.delete": "Xóa",
+  "actions.cancel": "H?y",
+  "actions.save": "Luu",
+  "actions.confirm": "Xác nh?n",
+  "actions.view_details": "Xem chi ti?t",
+  "actions.generate_report": "T?o báo cáo",
+  "dashboard.title": "Trung tâm di?u khi?n",
+  "dashboard.desc": "Dòng ti?n doanh nghi?p và các d? báo AI theo th?i gian th?c.",
+  "dashboard.revenue": "T?ng doanh thu",
+  "dashboard.expenses": "Chi phí hàng tháng",
+  "dashboard.profit": "L?i nhu?n ròng",
+  "dashboard.runway": "Th?i gian duy trì",
+  "dashboard.stable": "?n d?nh",
+  "dashboard.ai_insight_title": "Trí tu? nhân t?o Farvics",
+  "dashboard.ai_insight_desc": "Dòng ti?n ho?t d?ng dã kéo dài thêm 14 ngày d?a trên qu? d?o MRR hi?n t?i. Cân nh?c phân b? th?ng du cho các sáng ki?n ti?p th? quý 3.",
+  "dashboard.execute_allocation": "Th?c thi phân b?",
+  "dashboard.recent_ledger": "Giao d?ch g?n dây",
+  "dashboard.view_all": "Xem t?t c?",
+  "dashboard.action_timeline": "L?ch s? ho?t d?ng",
+  "dashboard.cash_flow_velocity": "V?n t?c dòng ti?n",
+  "page.accounts.title": "Danh m?c tài kho?n",
+  "page.accounts.desc": "S? dang ký t?p trung t?t c? các tài kho?n tài chính và s? du hi?n t?i.",
+  "page.transactions.title": "S? cái giao d?ch",
+  "page.transactions.desc": "S? cái b?t bi?n c?a t?t c? các dòng v?n vào và ra.",
+  "page.journals.title": "S? nh?t ký",
+  "page.journals.desc": "H? so k? toán kép và các lô d?i soát.",
+  "page.budgets.title": "Phân b? ngân sách",
+  "page.budgets.desc": "Theo dõi phân b? v?n theo phòng ban và d? án.",
+  "page.goals.title": "M?c tiêu v?n",
+  "page.goals.desc": "Các m?c tiêu chi?n lu?c và theo dõi c?t m?c d? tr?.",
+  "page.categories.title": "Danh m?c chi phí",
+  "page.categories.desc": "H? th?ng tài kho?n và ma tr?n phân lo?i.",
+  "page.exchange_rates.title": "T? giá h?i doái",
+  "page.exchange_rates.desc": "T? giá ngo?i h?i tr?c ti?p và giá tr? quy d?i.",
+  "page.reports.title": "Báo cáo tài chính",
+  "page.reports.desc": "Báo cáo l?ch s? dã t?o và mô hình d? doán.",
+  "page.reconciliation.title": "Ð?i soát",
+  "page.reconciliation.desc": "Ð?i kh?p sao kê ngân hàng và xác minh tính toàn v?n.",
+  "cmd.smart_suggestions": "G?i ý thông minh",
+  "cmd.record_tx": "Ghi nh?n giao d?ch",
+  "cmd.record_tx_desc": "Luu chi phí ho?c thu nh?p m?i",
+  "cmd.view_analytics": "Xem phân tích",
+  "cmd.view_analytics_desc": "Ki?m tra dòng ti?n tháng này",
+  "cmd.powered_by": "Cung c?p b?i Farvics AI"
+};
+
+fs.writeFileSync('d:\\ManagerMn\\locales\\en.json', JSON.stringify(en, null, 2));
+fs.writeFileSync('d:\\ManagerMn\\locales\\vi.json', JSON.stringify(vi, null, 2));
+
+const formatters = `
+export function formatCurrency(amount: number, locale: string = 'vi-VN', currency: string = 'VND'): string {
+  return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(amount);
+}
+export function formatDate(dateStr: string | Date, locale: string = 'vi-VN'): string {
+  const d = new Date(dateStr);
+  return new Intl.DateTimeFormat(locale, { day: '2-digit', month: '2-digit', year: 'numeric' }).format(d);
+}
+export function formatTime(dateStr: string | Date, locale: string = 'vi-VN'): string {
+  const d = new Date(dateStr);
+  return new Intl.DateTimeFormat(locale, { hour: '2-digit', minute: '2-digit' }).format(d);
+}
+`;
+fs.mkdirSync('d:\\ManagerMn\\src\\shared\\i18n', { recursive: true });
+fs.writeFileSync('d:\\ManagerMn\\src\\shared\\i18n\\formatters.ts', formatters);

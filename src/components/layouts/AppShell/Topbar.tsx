@@ -3,8 +3,10 @@ import * as React from 'react';
 import { Search, Command, Settings2 } from 'lucide-react';
 import { NotificationCenter } from '../../features/notifications/NotificationCenter';
 import { motion } from 'framer-motion';
+import { useTranslation } from '../../../providers/I18nProvider';
 
 export function Topbar({ onOpenCommandPalette }: { onOpenCommandPalette: () => void }) {
+  const { t } = useTranslation();
   return (
     <header className="sticky top-0 z-20 flex h-24 shrink-0 items-center gap-x-4 bg-transparent px-6 sm:px-10">
       <div className="flex flex-1 gap-x-6 self-stretch items-center">
@@ -17,7 +19,7 @@ export function Topbar({ onOpenCommandPalette }: { onOpenCommandPalette: () => v
             className="group flex w-full items-center gap-3 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] px-4 py-3 text-sm text-content-secondary transition-all shadow-[0_4px_24px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_32px_rgba(255,255,255,0.03)] backdrop-blur-xl"
           >
             <Search size={18} className="text-content-muted group-hover:text-white transition-colors" strokeWidth={1.5} />
-            <span className="flex-1 text-left font-medium tracking-wide">Command Center...</span>
+            <span className="flex-1 text-left font-medium tracking-wide">{t('common.search')}</span>
             <kbd className="hidden sm:flex h-6 items-center gap-1 rounded-md border border-white/10 bg-black/20 px-2 font-mono text-[11px] font-medium text-content-muted shadow-inner group-hover:text-white transition-colors">
               <Command size={11} /> K
             </kbd>
@@ -31,7 +33,7 @@ export function Topbar({ onOpenCommandPalette }: { onOpenCommandPalette: () => v
                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-aurora-green opacity-75"></span>
                <span className="relative inline-flex rounded-full h-2 w-2 bg-aurora-green shadow-[0_0_8px_rgba(5,150,105,0.8)]"></span>
              </span>
-             <span className="text-[11px] font-semibold text-aurora-green uppercase tracking-widest">Operational</span>
+             <span className="text-[11px] font-semibold text-aurora-green uppercase tracking-widest">{t('common.operational')}</span>
           </div>
 
           <div className="h-6 w-px bg-white/10 hidden sm:block" />

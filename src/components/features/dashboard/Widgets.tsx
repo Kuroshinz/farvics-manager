@@ -5,6 +5,7 @@ import { ArrowUpRight, ArrowDownRight, Sparkles, TrendingUp, Wallet, Target, Cal
 import { Typography } from '../../ui/typography/Typography';
 import { GlassPanel } from '../../ui/glass-panel/GlassPanel';
 import { cn } from '../../../lib/utils';
+import { useTranslation } from '../../../providers/I18nProvider';
 
 // Shared Metrics Card
 export function MetricCard({ title, amount, trend, isPositive, icon, delay = 0 }: any) {
@@ -32,6 +33,7 @@ export function MetricCard({ title, amount, trend, isPositive, icon, delay = 0 }
 
 // AI Insight Card - Massive visual impact
 export function AIInsightCard() {
+  const { t } = useTranslation();
   return (
     <GlassPanel className="p-6 md:p-8 h-full relative overflow-hidden group">
       <div className="absolute inset-0 bg-gradient-galaxy opacity-20 group-hover:opacity-30 transition-opacity duration-700" />
@@ -40,10 +42,10 @@ export function AIInsightCard() {
       <div className="relative z-10 flex flex-col h-full justify-between">
         <div className="flex items-center gap-2 mb-4">
           <Sparkles size={16} className="text-galaxy-pink" />
-          <Typography variant="label" className="text-galaxy-pink tracking-widest font-bold">Farvics Intelligence</Typography>
+          <Typography variant="label" className="text-galaxy-pink tracking-widest font-bold">{t('dashboard.ai_insight_title')}</Typography>
         </div>
         <Typography variant="h3" className="font-medium text-white/90 leading-snug mb-6">
-          Operational runway has extended by 14 days based on current MRR trajectory. Consider allocating surplus to Q3 marketing initiatives.
+          {t('dashboard.ai_insight_desc')}
         </Typography>
         <button className="flex items-center gap-2 text-sm font-semibold text-white/80 hover:text-white transition-colors mt-auto">
           Execute Allocation <ChevronRight size={16} />
@@ -55,6 +57,7 @@ export function AIInsightCard() {
 
 // Transaction Table Mini
 export function RecentTransactions() {
+  const { t } = useTranslation();
   const txs = [
     { id: 1, name: 'Stripe Payout', type: 'Income', amount: '+$12,450.00', status: 'Completed', date: 'Today' },
     { id: 2, name: 'AWS Cloud', type: 'Expense', amount: '-$1,240.00', status: 'Completed', date: 'Yesterday' },
@@ -63,8 +66,8 @@ export function RecentTransactions() {
   return (
     <GlassPanel className="p-6 h-full flex flex-col">
       <div className="flex justify-between items-center mb-6">
-        <Typography variant="h3" className="text-lg">Recent Ledger</Typography>
-        <button className="text-xs text-content-muted hover:text-white transition-colors">View All</button>
+        <Typography variant="h3" className="text-lg">{t('dashboard.recent_ledger')}</Typography>
+        <button className="text-xs text-content-muted hover:text-white transition-colors">{t('dashboard.view_all')}</button>
       </div>
       <div className="flex-1 space-y-4">
         {txs.map(tx => (
@@ -91,9 +94,10 @@ export function RecentTransactions() {
 
 // Activity Timeline
 export function ActivityTimeline() {
+  const { t } = useTranslation();
   return (
     <GlassPanel className="p-6 h-full">
-      <Typography variant="h3" className="text-lg mb-6">Action Timeline</Typography>
+      <Typography variant="h3" className="text-lg mb-6">{t('dashboard.action_timeline')}</Typography>
       <div className="space-y-6 relative before:absolute before:inset-0 before:ml-[15px] before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-white/10 before:to-transparent">
         {[1, 2, 3].map((i) => (
           <div key={i} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">

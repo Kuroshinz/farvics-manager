@@ -2,14 +2,16 @@
 import * as React from 'react';
 import { GlassPanel } from '../../ui/glass-panel/GlassPanel';
 import { Typography } from '../../ui/typography/Typography';
+import { useTranslation } from '../../../providers/I18nProvider';
 
 // A beautifully simulated SVG chart avoiding heavy Recharts deps for the static skeleton
 export default function DynamicChartWidget() {
+  const { t } = useTranslation();
   return (
     <GlassPanel className="p-6 h-full flex flex-col relative overflow-hidden group">
       <div className="flex justify-between items-center mb-8 relative z-10">
         <div>
-          <Typography variant="label" className="opacity-70">Cash Flow Velocity</Typography>
+          <Typography variant="label" className="opacity-70">{t('dashboard.cash_flow_velocity')}</Typography>
           <Typography variant="h2" className="mt-1">$48,250.00</Typography>
         </div>
         <div className="flex gap-2">

@@ -2,10 +2,12 @@
 import * as React from 'react';
 import { ChevronsUpDown, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from '../../../providers/I18nProvider';
 
 export function WorkspaceSwitcher({ collapsed }: { collapsed?: boolean }) {
   const [isOpen, setIsOpen] = React.useState(false);
-  const workspaces = ['Farvics HQ', 'Personal Portfolio', 'Acme Corp Sandbox'];
+  const { t } = useTranslation();
+  const workspaces = [t('common.farvics_hq'), 'Personal Portfolio', 'Acme Corp Sandbox'];
   const [active, setActive] = React.useState(workspaces[0]);
 
   return (

@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { WorkspaceSwitcher } from '../../features/workspace-switcher/WorkspaceSwitcher';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTranslation } from '../../../providers/I18nProvider';
 
 interface SidebarProps {
   collapsed: boolean;
@@ -14,15 +15,16 @@ interface SidebarProps {
 }
 
 const navItems = [
-  { icon: LayoutDashboard, label: 'Overview', href: '/' },
-  { icon: Wallet, label: 'Accounts', href: '/accounts' },
-  { icon: ArrowRightLeft, label: 'Transactions', href: '/transactions' },
-  { icon: BookOpen, label: 'Journals', href: '/journals' },
-  { icon: PieChart, label: 'Budgets', href: '/budgets' },
-  { icon: Target, label: 'Goals', href: '/goals' },
+  { icon: LayoutDashboard, label: 'nav.overview', href: '/' },
+  { icon: Wallet, label: 'nav.accounts', href: '/accounts' },
+  { icon: ArrowRightLeft, label: 'nav.transactions', href: '/transactions' },
+  { icon: BookOpen, label: 'nav.journals', href: '/journals' },
+  { icon: PieChart, label: 'nav.budgets', href: '/budgets' },
+  { icon: Target, label: 'nav.goals', href: '/goals' },
 ];
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
+  const { t } = useTranslation();
   const pathname = usePathname();
   
   return (
@@ -61,7 +63,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
-            <Link key={item.label} href={item.href}>
+            <Link key={t(item.label)} href={item.href}>
               <div
                 className={cn(
                   "group flex items-center gap-3 rounded-2xl px-3 py-3 transition-all cursor-pointer relative",

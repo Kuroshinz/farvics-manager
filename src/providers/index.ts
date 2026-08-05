@@ -4,3 +4,5 @@ export * from './UIProviders';
 // export * from './CommandPaletteProvider';
 // export * from './SDKProvider';
 
+
+export * from './I18nProvider';

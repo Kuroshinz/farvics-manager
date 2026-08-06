@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 
 import * as React from 'react';
 import { login } from '../../actions/auth';

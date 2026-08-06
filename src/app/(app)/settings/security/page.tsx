@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 
 import * as React from 'react';
 import { GlassPanel } from '../../../../components/ui/glass-panel/GlassPanel';

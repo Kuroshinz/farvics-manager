@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { AppShell } from '../../components/layouts/AppShell/AppShell';
 import { I18nProvider } from '../../providers/I18nProvider';
 import { getDictionary } from '../../shared/i18n/server';

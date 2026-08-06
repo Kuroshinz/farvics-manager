@@ -1,4 +1,7 @@
+﻿const fs = require('fs');
+const queriesPath = 'd:\\ManagerMn\\src\\app\\actions\\financial-queries.ts';
 
+const queries = `
 'use server';
 import { createClient } from '../../shared/infrastructure/supabase/server';
 import { cookies } from 'next/headers';
@@ -115,3 +118,6 @@ export async function getDashboardGatewayData() {
     }
   };
 }
+`;
+fs.writeFileSync(queriesPath, queries);
+

@@ -16,7 +16,7 @@ export default function SecurityPage() {
             <Typography variant="caption" className="text-content-muted">Hồ Chí Minh, VN • IP: 192.168.1.1</Typography>
           </div>
         </div>
-        <form action={logoutAllDevices}>
+        <form action={logoutAllDevices as any}>
           <button type="submit" className="text-galaxy-red hover:bg-galaxy-red/10 px-4 py-2 rounded-lg transition-colors font-medium border border-galaxy-red/20">
             Đăng xuất tất cả thiết bị
           </button>

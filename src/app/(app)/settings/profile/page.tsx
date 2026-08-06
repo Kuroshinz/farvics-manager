@@ -9,7 +9,7 @@ export default function ProfilePage() {
     <div className="space-y-6 animate-fade-in p-6">
       <Typography variant="h2">Hồ sơ cá nhân</Typography>
       <GlassPanel className="p-6 max-w-2xl">
-        <form action={updateProfile} className="space-y-4">
+        <form action={updateProfile as any} className="space-y-4">
           <div>
             <label className="block text-sm text-content-secondary mb-1">Tên hiển thị</label>
             <input name="displayName" className="w-full bg-white/5 border border-white/10 rounded-lg p-2 text-white" />

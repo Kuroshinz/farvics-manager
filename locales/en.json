@@ -61,5 +61,12 @@
   "cmd.record_tx_desc": "Log a new expense or income",
   "cmd.view_analytics": "View Analytics",
   "cmd.view_analytics_desc": "Check this month's cash flow",
-  "cmd.powered_by": "Powered by Farvics AI"
+  "cmd.powered_by": "Powered by Farvics AI",
+  "common.no_records_desc": "No records were found matching your criteria.",
+  "error.404": "Page Not Found",
+  "error.404_desc": "The page you are looking for does not exist or has been moved.",
+  "error.500": "System Error",
+  "error.500_desc": "A critical system error occurred. Engineering has been notified.",
+  "actions.go_home": "Return Home",
+  "dashboard.empty_ledger": "Empty Ledger"
 }

@@ -1,13 +1,13 @@
-'use client';
+﻿'use client';
 import * as React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, ArrowDownRight, Sparkles, TrendingUp, Wallet, Target, Calendar, Clock, ChevronRight } from 'lucide-react';
 import { Typography } from '../../ui/typography/Typography';
 import { GlassPanel } from '../../ui/glass-panel/GlassPanel';
 import { cn } from '../../../lib/utils';
+import { EmptyState } from '../../ui/empty-state/EmptyState';
 import { useTranslation } from '../../../providers/I18nProvider';
 
-// Shared Metrics Card
 export function MetricCard({ title, amount, trend, isPositive, icon, delay = 0 }: any) {
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay }}>
@@ -31,7 +31,6 @@ export function MetricCard({ title, amount, trend, isPositive, icon, delay = 0 }
   );
 }
 
-// AI Insight Card - Massive visual impact
 export function AIInsightCard() {
   const { t } = useTranslation();
   return (
@@ -48,51 +47,51 @@ export function AIInsightCard() {
           {t('dashboard.ai_insight_desc')}
         </Typography>
         <button className="flex items-center gap-2 text-sm font-semibold text-white/80 hover:text-white transition-colors mt-auto">
-          Execute Allocation <ChevronRight size={16} />
+          {t('dashboard.execute_allocation')} <ChevronRight size={16} />
         </button>
       </div>
     </GlassPanel>
   );
 }
 
-// Transaction Table Mini
-export function RecentTransactions() {
+export function RecentTransactions({ transactions = [] }: { transactions?: any[] }) {
   const { t } = useTranslation();
-  const txs = [
-    { id: 1, name: 'Stripe Payout', type: 'Income', amount: '+$12,450.00', status: 'Completed', date: 'Today' },
-    { id: 2, name: 'AWS Cloud', type: 'Expense', amount: '-$1,240.00', status: 'Completed', date: 'Yesterday' },
-    { id: 3, name: 'Figma Subscription', type: 'Expense', amount: '-$144.00', status: 'Pending', date: 'Aug 2' },
-  ];
   return (
     <GlassPanel className="p-6 h-full flex flex-col">
       <div className="flex justify-between items-center mb-6">
         <Typography variant="h3" className="text-lg">{t('dashboard.recent_ledger')}</Typography>
         <button className="text-xs text-content-muted hover:text-white transition-colors">{t('dashboard.view_all')}</button>
       </div>
+      
       <div className="flex-1 space-y-4">
-        {txs.map(tx => (
-          <div key={tx.id} className="flex items-center justify-between p-3 rounded-2xl hover:bg-white/[0.03] transition-colors group cursor-pointer border border-transparent hover:border-white/5">
-            <div className="flex items-center gap-4">
-              <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center border", tx.type === 'Income' ? "bg-aurora-green/10 border-aurora-green/20 text-aurora-green" : "bg-white/5 border-white/10 text-content-secondary")}>
-                {tx.type === 'Income' ? <TrendingUp size={16} /> : <Wallet size={16} />}
+        {transactions.length === 0 ? (
+          <EmptyState title={t('dashboard.empty_ledger')} description={t('common.no_records_desc')} />
+        ) : (
+          transactions.map(tx => (
+            <div key={tx.id} className="flex items-center justify-between p-3 rounded-2xl hover:bg-white/[0.03] transition-colors group cursor-pointer border border-transparent hover:border-white/5">
+              <div className="flex items-center gap-4">
+                <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center border", tx.type === 'Income' || (tx.amount && tx.amount > 0) ? "bg-aurora-green/10 border-aurora-green/20 text-aurora-green" : "bg-white/5 border-white/10 text-content-secondary")}>
+                  {tx.type === 'Income' || (tx.amount && tx.amount > 0) ? <TrendingUp size={16} /> : <Wallet size={16} />}
+                </div>
+                <div>
+                  <Typography variant="body" className="font-medium text-sm text-white group-hover:text-aurora-cyan transition-colors">{tx.description || tx.name || 'Unknown'}</Typography>
+                  <Typography variant="caption" className="text-xs">{tx.date || new Date().toLocaleDateString('vi-VN')}</Typography>
+                </div>
               </div>
-              <div>
-                <Typography variant="body" className="font-medium text-sm text-white group-hover:text-aurora-cyan transition-colors">{tx.name}</Typography>
-                <Typography variant="caption" className="text-xs">{tx.date}</Typography>
+              <div className="text-right">
+                <Typography variant="body" className={cn("font-semibold text-sm", tx.type === 'Income' ? "text-white" : "text-white")}>
+                  {tx.amount ? new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(tx.amount) : "0 \u20ab"}
+                </Typography>
+                <Typography variant="caption" className={cn("text-[10px] uppercase font-bold", tx.status === 'Completed' || tx.status === 'Active' ? "text-aurora-green/70" : "text-content-muted")}>{tx.status || 'Completed'}</Typography>
               </div>
             </div>
-            <div className="text-right">
-              <Typography variant="body" className={cn("font-semibold text-sm", tx.type === 'Income' ? "text-white" : "text-white")}>{tx.amount}</Typography>
-              <Typography variant="caption" className={cn("text-[10px] uppercase font-bold", tx.status === 'Completed' ? "text-aurora-green/70" : "text-content-muted")}>{tx.status}</Typography>
-            </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </GlassPanel>
   );
 }
 
-// Activity Timeline
 export function ActivityTimeline() {
   const { t } = useTranslation();
   return (
@@ -114,5 +113,3 @@ export function ActivityTimeline() {
     </GlassPanel>
   );
 }
-
-

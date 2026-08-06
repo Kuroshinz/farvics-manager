@@ -64,3 +64,41 @@ export async function fetchReconciliation() {
   return data;
 }
 
+export async function getDashboardGatewayData() {
+  const supabase = createClient();
+  
+  // Aggregate real metrics from Supabase
+  const [accountsRes, txsRes] = await Promise.all([
+    supabase.from('accounts').select('balance'),
+    supabase.from('transactions').select('amount, type')
+  ]);
+
+  let totalRevenue = 0;
+  let totalExpenses = 0;
+  
+  if (!txsRes.error && txsRes.data) {
+    txsRes.data.forEach(tx => {
+       if (tx.type === 'Income' || (tx.amount && tx.amount > 0)) totalRevenue += Number(tx.amount || 0);
+       else totalExpenses += Math.abs(Number(tx.amount || 0));
+    });
+  }
+
+  let liquidCapital = 0;
+  if (!accountsRes.error && accountsRes.data) {
+    accountsRes.data.forEach(acc => {
+      liquidCapital += Number(acc.balance || 0);
+    });
+  }
+
+  const netProfit = totalRevenue - totalExpenses;
+
+  return {
+    metrics: {
+      revenue: totalRevenue,
+      expenses: totalExpenses,
+      profit: netProfit,
+      capital: liquidCapital
+    }
+  };
+}
+

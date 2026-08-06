@@ -1,7 +1,8 @@
-import * as React from 'react';
+﻿import * as React from 'react';
 import { Typography } from '../typography/Typography';
 import { GlassPanel } from '../glass-panel/GlassPanel';
 import { cn } from '../../../lib/utils';
+import { EmptyState } from '../empty-state/EmptyState';
 
 interface Column<T> {
   key: string;
@@ -39,9 +40,7 @@ export function DataTable<T extends { id: string | number }>({ data, columns, ti
           <tbody className="divide-y divide-white/[0.02]">
             {data.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="px-6 py-12 text-center text-content-muted text-sm">
-                  {emptyStateMessage}
-                </td>
+                <td colSpan={columns.length} className="p-8"><EmptyState description={emptyStateMessage} /></td>
               </tr>
             ) : (
               data.map((item) => (
@@ -60,4 +59,5 @@ export function DataTable<T extends { id: string | number }>({ data, columns, ti
     </GlassPanel>
   );
 }
+
 

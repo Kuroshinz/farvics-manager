@@ -90,5 +90,7 @@
   "field.budget": "Budget",
   "field.statement_date": "Statement Date",
   "field.generated": "Generated",
-  "field.last_updated": "Last Updated"
+  "field.last_updated": "Last Updated",
+  "nav.notifications": "Notifications",
+  "nav.no_notifications": "No new notifications."
 }

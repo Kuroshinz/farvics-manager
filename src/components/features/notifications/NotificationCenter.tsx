@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import * as React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, X } from 'lucide-react';
@@ -32,12 +32,12 @@ export function NotificationCenter() {
               className="absolute right-0 top-full mt-2 w-80 overflow-hidden rounded-[24px] border border-white/10 bg-surface/90 backdrop-blur-3xl shadow-[0_20px_60px_rgba(0,0,0,0.6)] z-[500]"
             >
               <div className="flex items-center justify-between border-b border-white/5 px-5 py-4 bg-black/20">
-                <Typography variant="h3" className="text-sm">{t('nav.notifications') || 'Th�ng b�o'}</Typography>
+                <Typography variant="h3" className="text-sm">{t('nav.notifications')}</Typography>
                 <button onClick={close} className="text-content-muted hover:text-white"><X size={16}/></button>
               </div>
               <div className="max-h-[60vh] overflow-y-auto p-2">
                  <div className="p-4 text-center text-sm text-content-muted">
-                    No new notifications.
+                    {t('nav.no_notifications')}
                  </div>
               </div>
             </motion.div>
@@ -47,3 +47,4 @@ export function NotificationCenter() {
     </div>
   );
 }
+

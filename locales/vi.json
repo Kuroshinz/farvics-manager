@@ -90,5 +90,7 @@
   "field.budget": "Ngân sách",
   "field.statement_date": "Ngày sao kê",
   "field.generated": "Đã tạo",
-  "field.last_updated": "Cập nhật lần cuối"
+  "field.last_updated": "Cập nhật lần cuối",
+  "nav.notifications": "Thông báo",
+  "nav.no_notifications": "Không có thông báo mới."
 }

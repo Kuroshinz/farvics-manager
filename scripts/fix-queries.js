@@ -1,3 +1,5 @@
+﻿const fs = require('fs');
+const content = `
 'use server';
 import { createClient } from '../../shared/infrastructure/supabase/server';
 
@@ -96,3 +98,5 @@ export async function getDashboardGatewayData() {
     }
   };
 }
+`;
+fs.writeFileSync('d:\\ManagerMn\\src\\app\\actions\\financial-queries.ts', content.trim(), 'utf8');

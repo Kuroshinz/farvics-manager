@@ -1,3 +1,4 @@
+﻿'use client';
 
 import * as React from 'react';
 import { motion, HTMLMotionProps } from 'framer-motion';
@@ -46,3 +47,4 @@ export const GlassPanel = React.forwardRef<HTMLDivElement, GlassPanelProps>(
 );
 
 GlassPanel.displayName = 'GlassPanel';
+

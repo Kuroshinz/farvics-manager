@@ -3,7 +3,6 @@ import { EmptyState } from '../components/ui/empty-state/EmptyState';
 import Link from 'next/link';
 
 export default function ErrorPage({ error, reset }: { error: Error & { digest?: string }, reset: () => void }) {
-  // Using direct strings here since this boundary catches context crashes
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-background p-4 relative">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-galaxy-red/10 via-background to-background pointer-events-none" />

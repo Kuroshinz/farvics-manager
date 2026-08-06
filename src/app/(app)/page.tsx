@@ -25,19 +25,19 @@ async function DashboardContent() {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-        <MetricCard title={translate("dashboard.revenue")} amount={formattedRevenue} trend="+0%" isPositive={true} icon={<Wallet size={18} strokeWidth={1.5} />} delay={0.1} />
-        <MetricCard title={translate("dashboard.expenses")} amount={formattedExpenses} trend="-0%" isPositive={false} icon={<TrendingDown size={18} strokeWidth={1.5} />} delay={0.2} />
-        <MetricCard title={translate("dashboard.profit")} amount={formattedProfit} trend="+0%" isPositive={true} icon={<LayoutDashboard size={18} strokeWidth={1.5} />} delay={0.3} />
+        <MetricCard title={translate("dashboard.revenue")} amount={formattedRevenue} trend={translate("dashboard.stable")} isPositive={true} icon={<Wallet size={18} strokeWidth={1.5} />} delay={0.1} />
+        <MetricCard title={translate("dashboard.expenses")} amount={formattedExpenses} trend={translate("dashboard.stable")} isPositive={false} icon={<TrendingDown size={18} strokeWidth={1.5} />} delay={0.2} />
+        <MetricCard title={translate("dashboard.profit")} amount={formattedProfit} trend={translate("dashboard.stable")} isPositive={true} icon={<LayoutDashboard size={18} strokeWidth={1.5} />} delay={0.3} />
         <MetricCard title={translate("dashboard.runway")} amount={formattedCapital} trend={translate("dashboard.stable")} isPositive={true} icon={<Coins size={18} strokeWidth={1.5} />} delay={0.4} />
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 h-auto min-h-[400px]">
         <div className="xl:col-span-2 h-[400px] xl:h-auto">
-          <DynamicChartWidget />
+          <DynamicChartWidget amount={formattedCapital} />
         </div>
         
         <div className="h-full">
-          <AIInsightCard />
+          <AIInsightCard insight={dashboardData.insight} />
         </div>
       </div>
 
@@ -68,3 +68,6 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+
+

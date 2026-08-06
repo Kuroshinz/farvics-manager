@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Suspense } from 'react';
 import { PageHeader } from '../../../components/layouts/AppShell/PageHeader';
+import { EmptyState } from '../../../components/ui/empty-state/EmptyState';
 import { DataTable } from '../../../components/ui/data-table/DataTable';
 import { TableSkeleton } from '../../../components/ui/skeleton/Skeleton';
 import { fetchAccounts } from '../../actions/financial-queries';
@@ -10,14 +11,12 @@ import { formatCurrency } from '../../../shared/i18n/formatters';
 
 async function DataContainer() {
   const data = await fetchAccounts();
-  
-  if (!data || data.length === 0) return <div className="p-8 text-center text-content-muted">{translate('common.no_records')}</div>;
-  
+  if (!data || data.length === 0) return <div className="mt-8"><EmptyState description={translate('common.no_records_desc')} /></div>;
   const columns = Object.keys(data[0])
     .filter(k => k !== 'id')
     .map(key => ({
       key,
-      header: key, // Could translate headers dynamically here if we added dict entries
+      header: translate(`field.${key}`) || key,
       render: (item: any) => {
          const val = item[key];
          

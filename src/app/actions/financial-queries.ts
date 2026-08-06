@@ -92,8 +92,7 @@ export async function getDashboardGatewayData() {
 
   const netProfit = totalRevenue - totalExpenses;
 
-  return {
-    metrics: {
+  return { insight: "Dữ liệu AI đang được tổng hợp dựa trên dòng tiền hiện tại...", metrics: {
       revenue: totalRevenue,
       expenses: totalExpenses,
       profit: netProfit,
@@ -101,4 +100,5 @@ export async function getDashboardGatewayData() {
     }
   };
 }
+
 

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import * as React from 'react';
 import { LayoutDashboard, ArrowRightLeft, BookOpen, PieChart, Users, Settings, ChevronRight, Wallet, Target } from 'lucide-react';
 import { cn } from '../../../lib/utils';
@@ -88,7 +88,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                         exit={{ opacity: 0, x: -10 }}
                         className="whitespace-nowrap font-medium text-sm tracking-wide"
                       >
-                        {item.label}
+                        {t(item.label)}
                       </motion.span>
                     )}
                   </AnimatePresence>
@@ -105,3 +105,4 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
     </motion.aside>
   );
 }
+

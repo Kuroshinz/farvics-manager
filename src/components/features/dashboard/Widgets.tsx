@@ -31,7 +31,7 @@ export function MetricCard({ title, amount, trend, isPositive, icon, delay = 0 }
   );
 }
 
-export function AIInsightCard() {
+export function AIInsightCard({ insight }: { insight?: string }) {
   const { t } = useTranslation();
   return (
     <GlassPanel className="p-6 md:p-8 h-full relative overflow-hidden group">
@@ -44,7 +44,7 @@ export function AIInsightCard() {
           <Typography variant="label" className="text-galaxy-pink tracking-widest font-bold">{t('dashboard.ai_insight_title')}</Typography>
         </div>
         <Typography variant="h3" className="font-medium text-white/90 leading-snug mb-6">
-          {t('dashboard.ai_insight_desc')}
+          {insight || t('dashboard.ai_insight_desc')}
         </Typography>
         <button className="flex items-center gap-2 text-sm font-semibold text-white/80 hover:text-white transition-colors mt-auto">
           {t('dashboard.execute_allocation')} <ChevronRight size={16} />
@@ -104,8 +104,8 @@ export function ActivityTimeline() {
               <Clock size={12} />
             </div>
             <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-2xl bg-white/[0.02] border border-white/5 shadow">
-               <Typography variant="body" className="text-sm font-medium">Reconciliation #{i}482</Typography>
-               <Typography variant="caption" className="text-xs">System auto-matched 45 records.</Typography>
+               <Typography variant="body" className="text-sm font-medium">{t('dashboard.reconciliation_id')}{i}482</Typography>
+               <Typography variant="caption" className="text-xs">{t('dashboard.reconciliation_desc')}</Typography>
             </div>
           </div>
         ))}
@@ -113,3 +113,5 @@ export function ActivityTimeline() {
     </GlassPanel>
   );
 }
+
+

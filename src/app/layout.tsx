@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const inter = Inter({ subsets: ["latin", "vietnamese"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: "Farvics Manager | Enterprise Financial Intelligence",
@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="vi" className="dark">
       <body className={`${inter.variable} font-sans bg-background text-content-primary overflow-hidden`}>
         {/* Deep Space Glow Background */}
         <div className="fixed inset-0 z-[-1] pointer-events-none">
@@ -28,4 +28,5 @@ export default function RootLayout({
     </html>
   );
 }
+
 

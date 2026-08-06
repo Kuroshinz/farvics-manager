@@ -1,4 +1,37 @@
+﻿const fs = require('fs');
 
+// 1. Profile Actions Update
+const authActionsPath = 'd:\\ManagerMn\\src\\app\\actions\\auth-enterprise.ts';
+let authActions = fs.readFileSync(authActionsPath, 'utf8');
+authActions = authActions.replace(/export async function updateProfile.*?\}\n/s, `
+export async function updateProfile(formData: FormData) {
+  const supabase = createClient();
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) throw new Error('Unauthorized');
+  
+  const updates = {
+    full_name: formData.get('displayName'),
+    timezone: formData.get('timezone'),
+    language: formData.get('language'),
+    avatar_url: formData.get('avatarUrl')
+  };
+
+  const { error } = await supabase.auth.updateUser({ data: updates });
+  if (error) throw new Error(error.message);
+  
+  // Upsert preferences
+  await supabase.from('user_preferences').upsert({
+    user_id: session.user.id,
+    timezone: updates.timezone,
+    language: updates.language
+  });
+}
+`);
+fs.writeFileSync(authActionsPath, authActions);
+
+// 2. Profile Page UI
+const profilePagePath = 'd:\\ManagerMn\\src\\app\\(app)\\settings\\profile\\page.tsx';
+const profilePage = `
 'use client';
 import * as React from 'react';
 import { GlassPanel } from '../../../../components/ui/glass-panel/GlassPanel';
@@ -29,7 +62,7 @@ export default function ProfilePage() {
       const fileExt = file.name.split('.').pop();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
-      const filePath = `${user.id}/avatar-${Math.random()}.${fileExt}`;
+      const filePath = \`\${user.id}/avatar-\${Math.random()}.\${fileExt}\`;
       
       const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file);
       if (uploadError) throw uploadError;
@@ -100,3 +133,6 @@ export default function ProfilePage() {
     </div>
   );
 }
+`;
+fs.writeFileSync(profilePagePath, profilePage);
+

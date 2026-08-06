@@ -7,8 +7,19 @@ import { useTranslation } from '../../../providers/I18nProvider';
 export function WorkspaceSwitcher({ collapsed }: { collapsed?: boolean }) {
   const [isOpen, setIsOpen] = React.useState(false);
   const { t } = useTranslation();
-  const workspaces = [t('common.farvics_hq'), 'Personal Portfolio', 'Acme Corp Sandbox'];
-  const [active, setActive] = React.useState(workspaces[0]);
+  const [workspaces, setWorkspaces] = React.useState<any[]>([]);
+  
+  const [active, setActive] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    import('../../../app/actions/workspaces').then(m => {
+      m.fetchWorkspaces().then(data => {
+        setWorkspaces(data);
+        if (data.length > 0) setActive(data[0]);
+      });
+    });
+  }, []);
+
 
   return (
     <div className="relative w-full">
@@ -18,10 +29,10 @@ export function WorkspaceSwitcher({ collapsed }: { collapsed?: boolean }) {
       >
         <div className="flex items-center gap-2 overflow-hidden">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-galaxy-purple to-galaxy-pink shadow-inner">
-            <span className="text-xs font-bold text-white tracking-widest">{active.substring(0, 2).toUpperCase()}</span>
+            <span className="text-xs font-bold text-white tracking-widest">{active?.name?.substring(0, 2).toUpperCase()}</span>
           </div>
           {!collapsed && (
-            <span className="truncate text-sm font-semibold text-white">{active}</span>
+            <span className="truncate text-sm font-semibold text-white">{active?.name}</span>
           )}
         </div>
         {!collapsed && <ChevronsUpDown size={14} className="text-content-muted shrink-0 mr-1" />}
@@ -38,12 +49,12 @@ export function WorkspaceSwitcher({ collapsed }: { collapsed?: boolean }) {
           >
             {workspaces.map((ws) => (
               <button
-                key={ws}
-                onClick={() => { setActive(ws); setIsOpen(false); }}
+                key={ws.id}
+                onClick={() => { setActive(ws); setIsOpen(false); import('../../../app/actions/workspaces').then(m => m.switchWorkspace(ws.id)); }}
                 className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm text-content-secondary hover:bg-white/10 hover:text-white transition-colors"
               >
-                <span className="truncate">{ws}</span>
-                {active === ws && <Check size={14} className="text-aurora-cyan" />}
+                <span className="truncate">{ws.name}</span>
+                {active?.id === ws.id && <Check size={14} className="text-aurora-cyan" />}
               </button>
             ))}
           </motion.div>

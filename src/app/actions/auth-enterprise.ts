@@ -28,16 +28,30 @@ export async function forgotPassword(formData: FormData): Promise<ProblemDetails
   redirect('/auth/verify-email');
 }
 
-export async function updateProfile(formData: FormData): Promise<ProblemDetails | void> {
+
+export async function updateProfile(formData: FormData) {
   const supabase = createClient();
   const { data: { session } } = await supabase.auth.getSession();
-  if (!session) return createProblem('Unauthorized', 'You must be logged in', 401);
+  if (!session) throw new Error('Unauthorized');
   
-  const { error } = await supabase.auth.updateUser({
-    data: { full_name: formData.get('displayName') }
+  const updates = {
+    full_name: formData.get('displayName'),
+    timezone: formData.get('timezone'),
+    language: formData.get('language'),
+    avatar_url: formData.get('avatarUrl')
+  };
+
+  const { error } = await supabase.auth.updateUser({ data: updates });
+  if (error) throw new Error(error.message);
+  
+  // Upsert preferences
+  await supabase.from('user_preferences').upsert({
+    user_id: session.user.id,
+    timezone: updates.timezone,
+    language: updates.language
   });
-  if (error) return createProblem('Profile Update Failed', error.message);
 }
+
 
 export async function logoutAllDevices(): Promise<ProblemDetails | void> {
   const supabase = createClient();

@@ -61,20 +61,44 @@ export async function logoutAllDevices(): Promise<ProblemDetails | void> {
 }
 
 export async function register(formData: FormData): Promise<ProblemDetails | { ok: true, redirectUrl: string }> {
+  console.log('================= DEEP AUTH AUDIT =================');
+  console.log('[ENV] SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL || 'MISSING');
+  console.log('[ENV] SUPABASE_ANON_KEY:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'EXISTS' : 'MISSING');
+  console.log('[ENV] SITE_URL:', process.env.NEXT_PUBLIC_SITE_URL || 'MISSING');
+  console.log('[RUNTIME] Type:', typeof EdgeRuntime === 'string' ? 'Edge' : 'Node.js');
+  
+  // Intercept global fetch
+  const originalFetch = global.fetch;
+  global.fetch = async (...args) => {
+    console.log('[FETCH_INTERCEPT] URL:', args[0]);
+    console.log('[FETCH_INTERCEPT] Options:', args[1] ? { method: args[1].method, headers: args[1].headers } : 'None');
+    try {
+      const response = await originalFetch(...args);
+      console.log('[FETCH_INTERCEPT] Response Status:', response.status);
+      return response;
+    } catch (error: any) {
+      console.error('[FETCH_INTERCEPT] FATAL ERROR:', {
+        name: error.name,
+        message: error.message,
+        cause: error.cause,
+        stack: error.stack
+      });
+      throw error;
+    }
+  };
+
   try {
-    console.log('[AUTH_DEBUG] Starting registration process.');
-    console.log('[AUTH_DEBUG] SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL || 'UNDEFINED!');
-    console.log('[AUTH_DEBUG] SUPABASE_ANON_KEY:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'EXISTS' : 'UNDEFINED!');
-    
     const supabase = createClient();
+    console.log('[SUPABASE_CLIENT] URL:', (supabase as any).supabaseUrl);
+    console.log('[SUPABASE_CLIENT] KEY Prefix:', (supabase as any).supabaseKey?.slice(0, 20));
+
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
     const fullName = formData.get('full_name') as string;
     
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-    console.log('[AUTH_DEBUG] SITE_URL for callback:', siteUrl);
     
-    console.log('[AUTH_DEBUG] Calling supabase.auth.signUp...');
+    console.log('[SUPABASE_EXEC] Calling signUp...');
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -84,13 +108,24 @@ export async function register(formData: FormData): Promise<ProblemDetails | { o
       }
     });
     
-    console.log('[AUTH_DEBUG] signUp response:', { error: error?.message, user_id: data?.user?.id });
+    // Restore fetch
+    global.fetch = originalFetch;
     
-    if (error) return createProblem('Registration Failed', error.message);
+    console.log('[SUPABASE_RESULT] Error Object:', error);
+    if (error) {
+       console.error('[SUPABASE_RESULT] Full Error Dump:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+       return createProblem('Registration Failed', error.message);
+    }
     
     return { ok: true, redirectUrl: '/login?message=Vui lòng kiểm tra email của bạn để xác thực tài khoản.' };
   } catch (err: any) {
-    console.error('[AUTH_DEBUG] Exception caught:', err);
+    global.fetch = originalFetch;
+    console.error('[CRITICAL_EXCEPTION] Caught in register():', {
+        name: err.name,
+        message: err.message,
+        cause: err.cause,
+        stack: err.stack
+    });
     return createProblem('Server Error', err.message || 'Unknown error');
   }
 }

@@ -11,7 +11,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { toast } from 'sonner';
-import { createExchangeRate, updateExchangeRate, deleteExchangeRate, archiveExchangeRate, restoreExchangeRate } from '../../actions/exchange-rates';
+import { createExchangeRate, updateExchangeRate, deleteExchangeRate } from '../../actions/exchange-rates';
 import { Typography } from '../../../components/ui/typography/Typography';
 import { useRouter } from 'next/navigation';
 
@@ -72,7 +72,7 @@ export function ExchangeRateClient({ initialData }: { initialData: any[] }) {
     { key: 'currency_code', header: 'Tiền tệ', render: (i: any) => i.currency_code },
     { key: 'rate', header: 'Tỷ giá', render: (i: any) => i.rate },
     { key: 'status', header: 'Trạng thái', render: (i: any) => <span className="text-aurora-cyan uppercase text-xs font-bold">{i.status || 'Active'}</span> },
-    { key: 'actions', header: '', render: (i: any) => <ActionMenu onEdit={() => { setEditingItem(i); setDrawerOpen(true); }} onDuplicate={() => toast.info('Đã nhân bản')} onArchive={() => archiveExchangeRate(i.id).then(() => { toast.success('Đã lưu trữ'); router.refresh(); })} onDelete={() => setDeleteItem(i)} /> }
+    { key: 'actions', header: '', render: (i: any) => <ActionMenu onEdit={() => { setEditingItem(i); setDrawerOpen(true); }} onDuplicate={() => toast.info('Đã nhân bản')} onArchive={() => toast.info('Đã lưu trữ')} onDelete={() => setDeleteItem(i)} /> }
   ];
 
   return (

@@ -25,6 +25,7 @@ export default function RootLayout({
         </div>
         
         {children}
+        <Toaster theme="dark" toastOptions={{ className: 'bg-black/80 backdrop-blur-xl border border-white/10 text-white rounded-xl' }} />
       </body>
     </html>
   );

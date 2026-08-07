@@ -62,13 +62,19 @@ export async function logoutAllDevices(): Promise<ProblemDetails | void> {
 
 export async function register(formData: FormData): Promise<ProblemDetails | { ok: true, redirectUrl: string }> {
   try {
+    console.log('[AUTH_DEBUG] Starting registration process.');
+    console.log('[AUTH_DEBUG] SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL || 'UNDEFINED!');
+    console.log('[AUTH_DEBUG] SUPABASE_ANON_KEY:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'EXISTS' : 'UNDEFINED!');
+    
     const supabase = createClient();
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
     const fullName = formData.get('full_name') as string;
     
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    console.log('[AUTH_DEBUG] SITE_URL for callback:', siteUrl);
     
+    console.log('[AUTH_DEBUG] Calling supabase.auth.signUp...');
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -78,10 +84,13 @@ export async function register(formData: FormData): Promise<ProblemDetails | { o
       }
     });
     
+    console.log('[AUTH_DEBUG] signUp response:', { error: error?.message, user_id: data?.user?.id });
+    
     if (error) return createProblem('Registration Failed', error.message);
     
     return { ok: true, redirectUrl: '/login?message=Vui lòng kiểm tra email của bạn để xác thực tài khoản.' };
   } catch (err: any) {
+    console.error('[AUTH_DEBUG] Exception caught:', err);
     return createProblem('Server Error', err.message || 'Unknown error');
   }
 }

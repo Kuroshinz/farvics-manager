@@ -1,63 +1,91 @@
 'use server';
 
-// Mocking DI Container resolution for Next.js actions
-import { ActionExecutor } from '../../shared/infrastructure/api/ActionExecutor';
-import { ActionContext, RateLimitTier } from '../../shared/infrastructure/api/ApiCore';
-import { CreateJournalCommand, PostJournalCommand, ReverseJournalCommand } from '../../modules/financial/application/commands';
-import { CreateJournalRequest, JournalResponse } from '../../modules/financial/application/dto';
-import { ProblemDetails } from '../../shared/core/Errors';
+import { createClient } from '../../shared/infrastructure/supabase/server';
+import { cookies } from 'next/headers';
+import { revalidatePath } from 'next/cache';
 
-// Helper to mock fetching the context and executor (In reality, injected via a Server Action wrapper)
-async function getContext(): Promise<ActionContext> {
-  return { correlationId: 'req-123', roles: ['USER'], ipAddress: '127.0.0.1' };
-}
-async function getExecutor(): Promise<ActionExecutor> { return {} as ActionExecutor; }
-
-export async function createJournal(req: CreateJournalRequest, idempotencyKey?: string): Promise<JournalResponse | ProblemDetails> {
-  const context = await getContext();
-  const executor = await getExecutor();
-  
-  return executor.execute(
-    req, 
-    context, 
-    {
-      name: 'CreateJournal',
-      roles: ['USER'],
-      tier: RateLimitTier.AUTHENTICATED,
-      mapToCommand: (r) => new CreateJournalCommand(r)
-    },
-    idempotencyKey
-  );
+function getWorkspaceId(cookieStore: Awaited<ReturnType<typeof cookies>>): string | null {
+  return cookieStore.get('active_workspace_id')?.value ?? null;
 }
 
-export async function postJournal(journalId: string): Promise<JournalResponse | ProblemDetails> {
-  const context = await getContext();
-  const executor = await getExecutor();
+export async function createJournal(input: {
+  date: string;
+  description: string;
+  entries: { accountId: string; amount: number; type: 'DEBIT' | 'CREDIT' }[];
+}) {
+  const cookieStore = cookies();
+  const workspaceId = getWorkspaceId(cookieStore);
+  if (!workspaceId) return { ok: false as const, error: 'WORKSPACE_REQUIRED' };
+
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { ok: false as const, error: 'UNAUTHENTICATED' };
+
+  // For a real CQRS system, this would go through the Mediator. 
+  // Since the DI container is not fully wired for financial modules, we implement the direct DB transaction here to unblock production.
   
-  return executor.execute(
-    { journalId }, 
-    context, 
+  const journalId = crypto.randomUUID();
+  const ops: any[] = [
     {
-      name: 'PostJournal',
-      roles: ['USER', 'ACCOUNTANT'],
-      tier: RateLimitTier.AUTHENTICATED,
-      mapToCommand: (r) => new PostJournalCommand(r.journalId)
+      table: 'financial_journals',
+      action: 'insert',
+      payload: {
+        id: journalId,
+        date: input.date,
+        description: input.description,
+        status: 'Draft',
+        workspace_id: workspaceId,
+        tenant_id: workspaceId,
+        created_by: user.id,
+        updated_by: user.id,
+        version: 1
+      }
     }
-  );
+  ];
+
+  for (const entry of input.entries) {
+    ops.push({
+      table: 'financial_journal_entries',
+      action: 'insert',
+      payload: {
+        id: crypto.randomUUID(),
+        journal_id: journalId,
+        account_id: entry.accountId,
+        amount_minor_units: Math.round(entry.amount * 100),
+        entry_type: entry.type,
+        workspace_id: workspaceId,
+        tenant_id: workspaceId,
+        created_by: user.id,
+        updated_by: user.id,
+        version: 1
+      }
+    });
+  }
+
+  const { error } = await supabase.rpc('execute_transaction_batch', { ops });
+  if (error) return { ok: false as const, error: error.message };
+  
+  revalidatePath('/journals');
+  return { ok: true as const, data: { id: journalId } };
 }
 
-export async function reverseJournal(journalId: string, reversalDate: Date): Promise<JournalResponse | ProblemDetails> {
-  const context = await getContext();
-  const executor = await getExecutor();
-  
-  return executor.execute(
-    { journalId, reversalDate }, 
-    context, 
-    {
-      name: 'ReverseJournal',
-      roles: ['ADMIN', 'ACCOUNTANT'],
-      tier: RateLimitTier.AUTHENTICATED,
-      mapToCommand: (r) => new ReverseJournalCommand(r.journalId, r.reversalDate)
-    }
-  );
+export async function postJournal(journalId: string) {
+  const cookieStore = cookies();
+  const workspaceId = getWorkspaceId(cookieStore);
+  if (!workspaceId) return { ok: false as const, error: 'WORKSPACE_REQUIRED' };
+
+  const supabase = createClient();
+  const { error } = await supabase
+    .from('financial_journals')
+    .update({ status: 'Posted', updated_at: new Date().toISOString() })
+    .eq('id', journalId)
+    .eq('workspace_id', workspaceId);
+
+  if (error) return { ok: false as const, error: error.message };
+  revalidatePath('/journals');
+  return { ok: true as const };
+}
+
+export async function reverseJournal(journalId: string, reversalDate: Date) {
+  return { ok: false as const, error: 'Not implemented directly without full domain rules.' };
 }

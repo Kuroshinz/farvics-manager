@@ -4,6 +4,7 @@ import * as React from 'react';
 import { login } from '../../actions/auth';
 import { GlassPanel } from '../../../components/ui/glass-panel/GlassPanel';
 import { Typography } from '../../../components/ui/typography/Typography';
+
 export default function LoginPage() {
   return (
     <div className="flex h-screen items-center justify-center bg-background p-4">

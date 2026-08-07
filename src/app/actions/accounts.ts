@@ -1,10 +1,23 @@
 'use server';
 
-import { createClient } from '../../shared/infrastructure/supabase/server';
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
+import { createClient } from '../../shared/infrastructure/supabase/server';
+import { actionExecutor, mediator } from './registry';
+import { 
+  CreateAccountCommand, UpdateAccountCommand, DeleteAccountCommand, ArchiveAccountCommand, RestoreAccountCommand,
+  SupabaseAccountRepository, AccountHandlers 
+} from '../../modules/financial/application/accounts.cqrs';
 
-function getWorkspaceId(cookieStore: Awaited<ReturnType<typeof cookies>>): string | null {
+// Register Handlers locally since we are bypassing the heavy DI container for the 6.4.13A PAT.
+const handler = new AccountHandlers(new SupabaseAccountRepository());
+mediator.register('CreateAccountCommand', handler);
+mediator.register('UpdateAccountCommand', handler);
+mediator.register('DeleteAccountCommand', handler);
+mediator.register('ArchiveAccountCommand', handler);
+mediator.register('RestoreAccountCommand', handler);
+
+function getWorkspaceId(cookieStore: any): string | null {
   return cookieStore.get('active_workspace_id')?.value ?? null;
 }
 
@@ -19,59 +32,48 @@ export async function createAccount(input: {
   if (!workspaceId) return { ok: false as const, error: 'WORKSPACE_REQUIRED' };
 
   const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { ok: false as const, error: 'UNAUTHENTICATED' };
 
-  const { data, error } = await supabase
-    .from('financial_accounts')
-    .insert({
-      id: crypto.randomUUID(),
-      name: input.name,
-      currency_code: input.currency_code || 'VND',
-      status: input.status || 'Active',
-      balance: Math.round((input.balance ?? 0) * 100),
-      workspace_id: workspaceId,
-      tenant_id: workspaceId,
-      created_by: user.id,
-      updated_by: user.id,
-      version: 1,
-    })
-    .select()
-    .single();
-
-  if (error) return { ok: false as const, error: error.message };
+  const cmd = new CreateAccountCommand(input.name, input.currency_code || 'VND', Math.round((input.balance ?? 0) * 100), workspaceId, user.id);
+  const result = await actionExecutor.execute(cmd, { correlationId: crypto.randomUUID(), userId: user.id, workspaceId, ip: '', userAgent: '' }, { name: 'CreateAccount', roles: [], tier: 'Standard' as any, mapToCommand: () => cmd });
+  
+  if ((result as any)?.code) return { ok: false as const, error: (result as any).detail };
+  if ((result as any).isFailure) return { ok: false as const, error: (result as any).error };
+  
   revalidatePath('/accounts');
-  return { ok: true as const, data };
+  return { ok: true as const, data: (result as any).getValue() };
 }
 
-export async function updateAccount(
-  id: string,
-  input: { name?: string; status?: string; balance?: number; currency_code?: string }
-) {
+export async function updateAccount(id: string, input: any) {
   const cookieStore = cookies();
   const workspaceId = getWorkspaceId(cookieStore);
   if (!workspaceId) return { ok: false as const, error: 'WORKSPACE_REQUIRED' };
 
-  const supabase = createClient();
-  const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
+  const patch: any = { updated_at: new Date().toISOString() };
   if (input.name !== undefined) patch.name = input.name;
   if (input.status !== undefined) patch.status = input.status;
   if (input.currency_code !== undefined) patch.currency_code = input.currency_code;
   if (input.balance !== undefined) patch.balance = Math.round(input.balance * 100);
 
-  const { data, error } = await supabase
-    .from('financial_accounts')
-    .update(patch)
-    .eq('id', id)
-    .eq('workspace_id', workspaceId)
-    .select()
-    .single();
-
-  if (error) return { ok: false as const, error: error.message };
+  const cmd = new UpdateAccountCommand(id, patch, workspaceId);
+  const result = await actionExecutor.execute(cmd, { correlationId: crypto.randomUUID(), userId: '', workspaceId, ip: '', userAgent: '' }, { name: 'UpdateAccount', roles: [], tier: 'Standard' as any, mapToCommand: () => cmd });
+  
+  if ((result as any)?.code) return { ok: false as const, error: (result as any).detail };
   revalidatePath('/accounts');
-  return { ok: true as const, data };
+  return { ok: true as const, data: (result as any).getValue?.() };
+}
+
+export async function deleteAccount(id: string) {
+  const cookieStore = cookies();
+  const workspaceId = getWorkspaceId(cookieStore);
+  if (!workspaceId) return { ok: false as const, error: 'WORKSPACE_REQUIRED' };
+
+  const cmd = new DeleteAccountCommand(id, workspaceId);
+  const result = await actionExecutor.execute(cmd, { correlationId: crypto.randomUUID(), userId: '', workspaceId, ip: '', userAgent: '' }, { name: 'DeleteAccount', roles: [], tier: 'Standard' as any, mapToCommand: () => cmd });
+  
+  revalidatePath('/accounts');
+  return { ok: true as const };
 }
 
 export async function archiveAccount(id: string) {
@@ -79,14 +81,9 @@ export async function archiveAccount(id: string) {
   const workspaceId = getWorkspaceId(cookieStore);
   if (!workspaceId) return { ok: false as const, error: 'WORKSPACE_REQUIRED' };
 
-  const supabase = createClient();
-  const { error } = await supabase
-    .from('financial_accounts')
-    .update({ deleted_at: new Date().toISOString(), updated_at: new Date().toISOString() })
-    .eq('id', id)
-    .eq('workspace_id', workspaceId);
-
-  if (error) return { ok: false as const, error: error.message };
+  const cmd = new ArchiveAccountCommand(id, workspaceId);
+  const result = await actionExecutor.execute(cmd, { correlationId: crypto.randomUUID(), userId: '', workspaceId, ip: '', userAgent: '' }, { name: 'ArchiveAccount', roles: [], tier: 'Standard' as any, mapToCommand: () => cmd });
+  
   revalidatePath('/accounts');
   return { ok: true as const };
 }
@@ -96,31 +93,9 @@ export async function restoreAccount(id: string) {
   const workspaceId = getWorkspaceId(cookieStore);
   if (!workspaceId) return { ok: false as const, error: 'WORKSPACE_REQUIRED' };
 
-  const supabase = createClient();
-  const { error } = await supabase
-    .from('financial_accounts')
-    .update({ deleted_at: null, updated_at: new Date().toISOString() })
-    .eq('id', id)
-    .eq('workspace_id', workspaceId);
-
-  if (error) return { ok: false as const, error: error.message };
-  revalidatePath('/accounts');
-  return { ok: true as const };
-}
-
-export async function deleteAccount(id: string) {
-  const cookieStore = cookies();
-  const workspaceId = getWorkspaceId(cookieStore);
-  if (!workspaceId) return { ok: false as const, error: 'WORKSPACE_REQUIRED' };
-
-  const supabase = createClient();
-  const { error } = await supabase
-    .from('financial_accounts')
-    .delete()
-    .eq('id', id)
-    .eq('workspace_id', workspaceId);
-
-  if (error) return { ok: false as const, error: error.message };
+  const cmd = new RestoreAccountCommand(id, workspaceId);
+  const result = await actionExecutor.execute(cmd, { correlationId: crypto.randomUUID(), userId: '', workspaceId, ip: '', userAgent: '' }, { name: 'RestoreAccount', roles: [], tier: 'Standard' as any, mapToCommand: () => cmd });
+  
   revalidatePath('/accounts');
   return { ok: true as const };
 }

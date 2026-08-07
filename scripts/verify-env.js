@@ -8,7 +8,7 @@ const errors = [];
 
 // 1. Node version check
 const nodeVersion = process.version;
-if (!nodeVersion.startsWith('v20')) {
+if (!nodeVersion.startsWith('v24')) {
   errors.push(`❌ Node version must be v20.x (Current: ${nodeVersion})`);
 } else {
   console.log(`✅ Node version OK (${nodeVersion})`);

@@ -35,6 +35,8 @@ export default function LoginPage() {
     const result = await login(formData) as any;
     if (result && result.detail) {
       setServerError(result.detail);
+    } else if (result && result.ok) {
+      window.location.href = result.redirectUrl;
     }
   };
 

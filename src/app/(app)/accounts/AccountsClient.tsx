@@ -63,7 +63,7 @@ export function AccountsClient({ initialData }: { initialData: any[] }) {
 
   const columns = [
     { key: 'name', header: 'Tên', render: (i: any) => <Typography variant="body" className="font-semibold">{i.name}</Typography> },
-    { key: 'currency_code', header: 'Tiền tệ' },
+    { key: 'currency_code', header: 'Tiền tệ', render: (i: any) => i.currency_code },
     { key: 'balance', header: 'Số dư', render: (i: any) => formatCurrency(Number(i.balance || 0)/100) },
     { key: 'status', header: 'Trạng thái', render: (i: any) => <span className="text-aurora-green uppercase text-xs font-bold">{i.status}</span> },
     { key: 'actions', header: '', render: (i: any) => <ActionMenu onEdit={() => toast.info('Sắp ra mắt')} onDuplicate={() => toast.info('Đã nhân bản')} onArchive={() => toast.info('Đã lưu trữ')} onDelete={() => setDeleteItem(i)} /> }

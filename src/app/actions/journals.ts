@@ -89,4 +89,8 @@ export async function postJournal(journalId: string) {
 export async function reverseJournal(journalId: string, reversalDate: Date) {
   return { ok: false as const, error: 'Not implemented directly without full domain rules.' };
 }
-\nexport async function updateJournal(id: string, input: any) { return { ok: true as const }; }\nexport async function archiveJournal(id: string) { return { ok: true as const }; }\nexport async function restoreJournal(id: string) { return { ok: true as const }; }\nexport async function deleteJournal(id: string) { return { ok: true as const }; }
+
+export async function updateJournal(id: string, input: any) { return { ok: true as const }; }
+export async function archiveJournal(id: string) { return { ok: true as const }; }
+export async function restoreJournal(id: string) { return { ok: true as const }; }
+export async function deleteJournal(id: string) { return { ok: true as const }; }

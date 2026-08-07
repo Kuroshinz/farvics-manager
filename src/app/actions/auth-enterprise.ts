@@ -59,3 +59,19 @@ export async function logoutAllDevices(): Promise<ProblemDetails | void> {
   if (error) return createProblem('Logout Failed', error.message, 500);
   redirect('/login');
 }
+
+export async function register(formData: FormData): Promise<ProblemDetails | void> {
+  const supabase = createClient();
+  const email = formData.get('email') as string;
+  const password = formData.get('password') as string;
+  const fullName = formData.get('full_name') as string;
+  
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: { data: { full_name: fullName } }
+  });
+  
+  if (error) return createProblem('Registration Failed', error.message);
+  redirect('/verify-email');
+}

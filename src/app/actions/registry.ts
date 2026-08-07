@@ -5,7 +5,7 @@ import { Result } from '../../shared/core/Result';
 class MockMediator implements IMediator {
   private handlers = new Map<string, any>();
   register(commandName: string, handler: any) { this.handlers.set(commandName, handler); }
-  async query(q: any): Promise<Result<any>> { return Result.ok(); }
+  async query<TResult>(q: IQuery): Promise<TResult> { return Result.ok() as unknown as TResult; }
   async send<TResult>(command: ICommand): Promise<TResult> {
     const handler = this.handlers.get(command.constructor.name);
     if (!handler) throw new Error(`No handler for ${command.constructor.name}`);

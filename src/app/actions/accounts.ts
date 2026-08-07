@@ -36,7 +36,7 @@ export async function createAccount(input: {
   if (!user) return { ok: false as const, error: 'UNAUTHENTICATED' };
 
   const cmd = new CreateAccountCommand(input.name, input.currency_code || 'VND', Math.round((input.balance ?? 0) * 100), workspaceId, user.id);
-  const result = await actionExecutor.execute(cmd, { correlationId: crypto.randomUUID(), userId: user.id, workspaceId, ip: '', userAgent: '' }, { name: 'CreateAccount', roles: [], tier: 'Standard' as any, mapToCommand: () => cmd });
+  const result = await actionExecutor.execute(cmd, { correlationId: crypto.randomUUID(), userId: user.id, ip: '', userAgent: '' }, { name: 'CreateAccount', roles: [], tier: 'Standard' as any, mapToCommand: () => cmd });
   
   if ((result as any)?.code) return { ok: false as const, error: (result as any).detail };
   if ((result as any).isFailure) return { ok: false as const, error: (result as any).error };
@@ -57,7 +57,7 @@ export async function updateAccount(id: string, input: any) {
   if (input.balance !== undefined) patch.balance = Math.round(input.balance * 100);
 
   const cmd = new UpdateAccountCommand(id, patch, workspaceId);
-  const result = await actionExecutor.execute(cmd, { correlationId: crypto.randomUUID(), userId: '', workspaceId, ip: '', userAgent: '' }, { name: 'UpdateAccount', roles: [], tier: 'Standard' as any, mapToCommand: () => cmd });
+  const result = await actionExecutor.execute(cmd, { correlationId: crypto.randomUUID(), userId: '', ip: '', userAgent: '' }, { name: 'UpdateAccount', roles: [], tier: 'Standard' as any, mapToCommand: () => cmd });
   
   if ((result as any)?.code) return { ok: false as const, error: (result as any).detail };
   revalidatePath('/accounts');
@@ -70,7 +70,7 @@ export async function deleteAccount(id: string) {
   if (!workspaceId) return { ok: false as const, error: 'WORKSPACE_REQUIRED' };
 
   const cmd = new DeleteAccountCommand(id, workspaceId);
-  const result = await actionExecutor.execute(cmd, { correlationId: crypto.randomUUID(), userId: '', workspaceId, ip: '', userAgent: '' }, { name: 'DeleteAccount', roles: [], tier: 'Standard' as any, mapToCommand: () => cmd });
+  const result = await actionExecutor.execute(cmd, { correlationId: crypto.randomUUID(), userId: '', ip: '', userAgent: '' }, { name: 'DeleteAccount', roles: [], tier: 'Standard' as any, mapToCommand: () => cmd });
   
   revalidatePath('/accounts');
   return { ok: true as const };
@@ -82,7 +82,7 @@ export async function archiveAccount(id: string) {
   if (!workspaceId) return { ok: false as const, error: 'WORKSPACE_REQUIRED' };
 
   const cmd = new ArchiveAccountCommand(id, workspaceId);
-  const result = await actionExecutor.execute(cmd, { correlationId: crypto.randomUUID(), userId: '', workspaceId, ip: '', userAgent: '' }, { name: 'ArchiveAccount', roles: [], tier: 'Standard' as any, mapToCommand: () => cmd });
+  const result = await actionExecutor.execute(cmd, { correlationId: crypto.randomUUID(), userId: '', ip: '', userAgent: '' }, { name: 'ArchiveAccount', roles: [], tier: 'Standard' as any, mapToCommand: () => cmd });
   
   revalidatePath('/accounts');
   return { ok: true as const };
@@ -94,7 +94,7 @@ export async function restoreAccount(id: string) {
   if (!workspaceId) return { ok: false as const, error: 'WORKSPACE_REQUIRED' };
 
   const cmd = new RestoreAccountCommand(id, workspaceId);
-  const result = await actionExecutor.execute(cmd, { correlationId: crypto.randomUUID(), userId: '', workspaceId, ip: '', userAgent: '' }, { name: 'RestoreAccount', roles: [], tier: 'Standard' as any, mapToCommand: () => cmd });
+  const result = await actionExecutor.execute(cmd, { correlationId: crypto.randomUUID(), userId: '', ip: '', userAgent: '' }, { name: 'RestoreAccount', roles: [], tier: 'Standard' as any, mapToCommand: () => cmd });
   
   revalidatePath('/accounts');
   return { ok: true as const };

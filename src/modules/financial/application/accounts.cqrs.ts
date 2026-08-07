@@ -94,6 +94,6 @@ export class AccountHandlers {
     if (command instanceof RestoreAccountCommand) {
       return await this.repo.update(command.id, { deleted_at: null, updated_at: new Date().toISOString() }, command.workspaceId);
     }
-    return Result.fail('Unknown command');
+    return Result.fail({ code: 'ERR', message: 'Unknown command' } as any);
   }
 }

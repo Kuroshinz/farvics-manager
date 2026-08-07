@@ -65,7 +65,7 @@ export async function register(formData: FormData): Promise<ProblemDetails | { o
   console.log('[ENV] SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL || 'MISSING');
   console.log('[ENV] SUPABASE_ANON_KEY:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'EXISTS' : 'MISSING');
   console.log('[ENV] SITE_URL:', process.env.NEXT_PUBLIC_SITE_URL || 'MISSING');
-  console.log('[RUNTIME] Type:', typeof EdgeRuntime === 'string' ? 'Edge' : 'Node.js');
+  console.log('[RUNTIME] Type:', process.env.NEXT_RUNTIME === 'edge' ? 'Edge' : 'Node.js');
   
   // Intercept global fetch
   const originalFetch = global.fetch;

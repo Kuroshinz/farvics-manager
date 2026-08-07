@@ -1,5 +1,5 @@
-import { IMediator, ICommand } from '../../shared/application/Pipeline';
-import { ActionExecutor, ActionContext } from '../../shared/infrastructure/api/ActionExecutor';
+import { IMediator, ICommand, IQuery } from '../../shared/application/Pipeline';
+import { ActionExecutor } from '../../shared/infrastructure/api/ActionExecutor';
 import { Result } from '../../shared/core/Result';
 
 class MockMediator implements IMediator {

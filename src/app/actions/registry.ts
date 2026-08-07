@@ -6,10 +6,10 @@ class MockMediator implements IMediator {
   private handlers = new Map<string, any>();
   register(commandName: string, handler: any) { this.handlers.set(commandName, handler); }
   async query(q: any): Promise<Result<any>> { return Result.ok(); }
-  async send(command: ICommand): Promise<Result<any>> {
+  async send<TResult>(command: ICommand): Promise<TResult> {
     const handler = this.handlers.get(command.constructor.name);
     if (!handler) throw new Error(`No handler for ${command.constructor.name}`);
-    return handler.handle(command);
+    return (await handler.handle(command)) as unknown as TResult;
   }
 }
 
@@ -21,7 +21,7 @@ class MockValidator { async validate() { return Result.ok(); } }
 
 export const mediator = new MockMediator();
 export const actionExecutor = new ActionExecutor(
-  mediator,
+  mediator as any,
   new MockTelemetry() as any,
   new MockRateLimiter() as any,
   new MockAuthGuard() as any,

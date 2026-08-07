@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 function ensureDir(filePath) { const d = path.dirname(filePath); if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true }); }
-function writeFile(filePath, content) { ensureDir(filePath); fs.writeFileSync(filePath, content.trim() + '\\n', 'utf8'); console.log(\`[CREATED] \${filePath}\`); }
+function writeFile(filePath, content) { ensureDir(filePath); fs.writeFileSync(filePath, content.trim() + '\\n', 'utf8'); 
 const root = path.join(__dirname, '..');
 
 // 4. FORM DRAWER (Radix Dialog as a side drawer)
@@ -188,4 +188,4 @@ export function AccountsClient({ initialData }: { initialData: any[] }) {
   );
 }
 \`);
-console.log('Form drawer setup complete.');
+

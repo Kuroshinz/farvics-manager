@@ -1,6 +1,6 @@
 
 import { AuthorizationGuard as BaseAuthGuard, ActionContext } from './ApiCore';
-import { createClient } from '../../supabase/server';
+import { createClient } from '../../../shared/infrastructure/supabase/server';
 
 export class AuthorizationGuard extends BaseAuthGuard {
   async authorize(context: ActionContext, requiredRoles: string[]): Promise<boolean> {

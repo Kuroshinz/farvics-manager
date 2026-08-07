@@ -11,6 +11,8 @@ import { AuthorizationGuard } from '../shared/infrastructure/api/AuthorizationGu
 import { ActionRateLimiter, IdempotencyGuard } from '../shared/infrastructure/api/ApiCore';
 import { ValidationExecutor } from '../shared/infrastructure/api/ApiMappers';
 
+import { PostgreSQLResource } from '../shared/infrastructure/uow/PostgreSQLResource';
+
 export class PlatformModuleRegistration extends ModuleRegistration {
   readonly name = 'PlatformModule';
 
@@ -18,7 +20,7 @@ export class PlatformModuleRegistration extends ModuleRegistration {
     DefaultServiceRegistry.register(services);
     
     services.registerSingleton('IMediator', (provider) => new Mediator(provider));
-    services.registerScoped('IUnitOfWork', (provider) => new SupabaseUnitOfWork(new SupabaseRpcTransactionExecutor()));
+    services.registerScoped('IUnitOfWork', (provider) => new SupabaseUnitOfWork(new PostgreSQLResource(new SupabaseRpcTransactionExecutor()), {} as any, {} as any));
     
     services.registerSingleton('IActionTelemetry', () => new ProductionTelemetry());
     services.registerSingleton('AuthorizationGuard', () => new AuthorizationGuard());

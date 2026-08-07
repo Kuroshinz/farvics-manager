@@ -20,7 +20,7 @@ export class PlatformModuleRegistration extends ModuleRegistration {
     DefaultServiceRegistry.register(services);
     
     services.registerSingleton('IMediator', (provider) => new Mediator(provider));
-    services.registerScoped('IUnitOfWork', (provider) => new SupabaseUnitOfWork(new PostgreSQLResource(new SupabaseRpcTransactionExecutor()), {} as any, {} as any));
+    services.registerScoped('IUnitOfWork', (provider) => new SupabaseUnitOfWork(new PostgreSQLResource(new SupabaseRpcTransactionExecutor({} as any)), {} as any, {} as any));
     
     services.registerSingleton('IActionTelemetry', () => new ProductionTelemetry());
     services.registerSingleton('AuthorizationGuard', () => new AuthorizationGuard());

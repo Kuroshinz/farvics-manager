@@ -32,7 +32,7 @@ export function ExchangeRateClient({ initialData }: { initialData: any[] }) {
 
   React.useEffect(() => {
     if (editingItem) {
-      Object.keys(editingItem).forEach(k => setValue(k, editingItem[k]));
+      Object.keys(editingItem).forEach(k => setValue(k as any, editingItem[k]));
     } else {
       reset();
     }

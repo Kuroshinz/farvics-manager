@@ -1,4 +1,5 @@
-import { Toaster } from 'sonner';\nexport const dynamic = 'force-dynamic';
+import { Toaster } from 'sonner';
+export const dynamic = 'force-dynamic';
 ﻿import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";

@@ -13,7 +13,7 @@ async function DataContainer() {
 export default function Page() {
   return (
     <div className="space-y-6 md:space-y-8 h-full animate-fade-in pb-20">
-      <PageHeader title="Reconciliation" description="Quản lý dữ liệu" />
+      <PageHeader title="Reconciliation" description="Quản lý dữ liệu" breadcrumbs={[{ label: 'Farvics HQ' }, { label: 'Tài chính' }, { label: 'Reconciliation' }]} />
       <Suspense fallback={<div>Loading...</div>}><DataContainer /></Suspense>
     </div>
   );

@@ -56,7 +56,11 @@ export async function createAccount(input: {
   if ((result as any).isFailure) return { ok: false as const, error: (result as any).error };
   
   revalidatePath('/accounts');
-  return { ok: true as const, data: (result as any).getValue() };
+  
+  // Serialize the domain entity to a plain object to prevent Next.js Server Action serialization crashes
+  const plainData = JSON.parse(JSON.stringify((result as any).getValue()));
+  
+  return { ok: true as const, data: plainData };
 }
 
 export async function updateAccount(id: string, input: any) {

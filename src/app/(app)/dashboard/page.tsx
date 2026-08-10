@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 import { PageHeader } from '../../../components/layouts/AppShell/PageHeader';
 import { LoadingSkeleton } from '../../../components/ui/LoadingSkeleton';
+import { fetchTransactions, fetchAccounts } from '../../actions/financial-queries';
 
 const KPIGrid = dynamic(() => import('../../../components/dashboard/KPIGrid').then(mod => mod.KPIGrid), {
   loading: () => <LoadingSkeleton height="120px" className="mb-4" />,

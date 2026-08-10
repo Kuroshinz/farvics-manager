@@ -35,7 +35,7 @@ export async function createTransaction(input: {
       await supabase.from('workspace_members').insert({ id: crypto.randomUUID(), workspace_id: newWsId, user_id: user.id, role: 'owner' });
       workspaceId = newWsId;
     }
-    cookieStore.set('active_workspace_id', workspaceId, { path: '/' });
+    cookieStore.set('active_workspace_id', workspaceId as string, { path: '/' });
   }
   if (!workspaceId) return { ok: false as const, error: 'WORKSPACE_REQUIRED' };
 

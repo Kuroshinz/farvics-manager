@@ -1,0 +1,2 @@
+alter publication supabase_realtime add table financial_journal_entries;
+alter publication supabase_realtime add table financial_accounts;

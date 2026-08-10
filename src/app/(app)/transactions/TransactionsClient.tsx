@@ -14,6 +14,8 @@ import { createTransaction, updateTransaction, deleteTransaction, archiveTransac
 import { Typography } from '../../../components/ui/typography/Typography';
 import { useRouter } from 'next/navigation';
 
+import { CurrencyInput } from '../../../components/ui/form/CurrencyInput';
+
 const schema = z.object({
   description: z.string().min(1, 'Mô tả không được để trống'),
   amount: z.number().min(1, 'Số tiền phải lớn hơn 0'),
@@ -30,7 +32,7 @@ export function TransactionsClient({ initialData, accounts, categories }: { init
   const [isDrawerOpen, setDrawerOpen] = React.useState(false);
   const [deleteItem, setDeleteItem] = React.useState<any>(null);
 
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm({
+  const { register, control, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm({
     resolver: zodResolver(schema),
     defaultValues: { description: '', amount: 0, account_id: '', category_id: '', date: new Date().toISOString().split('T')[0], currency: 'VND', reference: '' }
   });
@@ -89,7 +91,8 @@ export function TransactionsClient({ initialData, accounts, categories }: { init
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div><label className="block text-xs font-medium text-content-secondary mb-1">Ngày</label><input type="date" {...register('date')} className="w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-white outline-none" />{errors.date && <span className="text-galaxy-red text-xs">{errors.date.message as string}</span>}</div>
           <div><label className="block text-xs font-medium text-content-secondary mb-1">Mô tả</label><input {...register('description')} className="w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-white outline-none" />{errors.description && <span className="text-galaxy-red text-xs">{errors.description.message as string}</span>}</div>
-          <div><label className="block text-xs font-medium text-content-secondary mb-1">Số tiền</label><input type="number" {...register('amount', { valueAsNumber: true })} className="w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-white outline-none" />{errors.amount && <span className="text-galaxy-red text-xs">{errors.amount.message as string}</span>}</div>
+          
+          <CurrencyInput name="amount" control={control} label="Số tiền" placeholder="1,000,000" error={errors.amount?.message as string} />
           
           <div>
             <label className="block text-xs font-medium text-content-secondary mb-1">Tài khoản</label>

@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import { createAccount, deleteAccount, archiveAccount, restoreAccount } from '../../actions/accounts';
 import { Typography } from '../../../components/ui/typography/Typography';
 import { useRouter } from 'next/navigation';
+import { CurrencyInput } from '../../../components/ui/form/CurrencyInput';
 
 const schema = z.object({
   name: z.string().min(1, 'Tên không được để trống'),
@@ -26,7 +27,7 @@ export function AccountsClient({ initialData }: { initialData: any[] }) {
   const [isDrawerOpen, setDrawerOpen] = React.useState(false);
   const [deleteItem, setDeleteItem] = React.useState<any>(null);
 
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm({
+  const { register, control, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm({
     resolver: zodResolver(schema),
     defaultValues: { name: '', currency_code: 'VND', balance: 0 }
   });
@@ -85,7 +86,9 @@ export function AccountsClient({ initialData }: { initialData: any[] }) {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div><label className="block text-xs font-medium text-content-secondary mb-1">Tên</label><input {...register('name')} className="w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-white outline-none" /></div>
           <div><label className="block text-xs font-medium text-content-secondary mb-1">Tiền tệ</label><input {...register('currency_code')} className="w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-white outline-none" /></div>
-          <div><label className="block text-xs font-medium text-content-secondary mb-1">Số dư ban đầu</label><input type="number" {...register('balance', { valueAsNumber: true })} className="w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-white outline-none" /></div>
+          
+          <CurrencyInput name="balance" control={control} label="Số dư ban đầu" placeholder="0" error={errors.balance?.message as string} />
+          
           <button type="submit" disabled={isSubmitting} className="w-full bg-aurora-cyan text-black font-semibold rounded-lg p-3 hover:bg-aurora-cyan/90 transition-colors mt-4">Lưu tài khoản</button>
         </form>
       </FormDrawer>

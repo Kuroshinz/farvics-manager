@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import { createBudget, updateBudget, deleteBudget, archiveBudget, restoreBudget } from '../../actions/budgets';
 import { Typography } from '../../../components/ui/typography/Typography';
 import { useRouter } from 'next/navigation';
+import { CurrencyInput } from '../../../components/ui/form/CurrencyInput';
 
 const schema = z.object({
   name: z.string().min(1, 'Tên không được để trống'),
@@ -34,7 +35,7 @@ export function BudgetsClient({ initialData, accounts, categories }: { initialDa
   const [isDrawerOpen, setDrawerOpen] = React.useState(false);
   const [deleteItem, setDeleteItem] = React.useState<any>(null);
 
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm({
+  const { register, control, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm({
     resolver: zodResolver(schema),
     defaultValues: { name: '', limit_minor_units: 0, account_id: '', category_id: '', period_start: new Date().toISOString().split('T')[0], period_end: '', currency_code: 'VND', description: '' }
   });
@@ -96,7 +97,7 @@ export function BudgetsClient({ initialData, accounts, categories }: { initialDa
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div><label className="block text-xs font-medium text-content-secondary mb-1">Tên ngân sách</label><input {...register('name')} className="w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-white outline-none" />{errors.name && <span className="text-galaxy-red text-xs">{errors.name.message as string}</span>}</div>
           
-          <div><label className="block text-xs font-medium text-content-secondary mb-1">Số tiền (VND)</label><input type="number" {...register('limit_minor_units', { valueAsNumber: true })} className="w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-white outline-none" />{errors.limit_minor_units && <span className="text-galaxy-red text-xs">{errors.limit_minor_units.message as string}</span>}</div>
+          <CurrencyInput name="limit_minor_units" control={control} label="Số tiền (VND)" placeholder="1,000,000" error={errors.limit_minor_units?.message as string} />
           
           <div className="flex gap-4">
             <div className="flex-1"><label className="block text-xs font-medium text-content-secondary mb-1">Từ ngày</label><input type="date" {...register('period_start')} className="w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-white outline-none" />{errors.period_start && <span className="text-galaxy-red text-xs">{errors.period_start.message as string}</span>}</div>

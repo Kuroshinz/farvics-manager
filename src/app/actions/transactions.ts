@@ -53,13 +53,28 @@ export async function createTransaction(input: {
   };
 
   // We write to financial_journals to represent a simplified transaction for this UI
-  const { data, error } = await supabase.from('financial_journals').insert(payload).select().single();
-  
-  if (error) return { ok: false as const, error: error.message };
+  const { data: journal, error: jError } = await supabase.from('financial_journals').insert(payload).select().single();
+  if (jError) return { ok: false as const, error: jError.message };
+
+  if (input.account_id && input.amount) {
+    const entryPayload = {
+      id: crypto.randomUUID(),
+      journal_id: txId,
+      account_id: input.account_id,
+      amount: input.amount, // No more *100, we use direct VND
+      type: input.amount >= 0 ? 'CREDIT' : 'DEBIT',
+      description: input.description,
+      workspace_id: workspaceId,
+      tenant_id: workspaceId,
+      created_by: user.id,
+      updated_by: user.id
+    };
+    await supabase.from('financial_journal_entries').insert(entryPayload);
+  }
   
   revalidatePath('/dashboard');
   revalidatePath('/transactions');
-  return { ok: true as const, data };
+  return { ok: true as const, data: journal };
 }
 
 export async function updateTransaction(id: string, input: any) {

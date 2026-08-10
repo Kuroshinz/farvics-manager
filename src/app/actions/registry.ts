@@ -18,7 +18,7 @@ class MockMediator implements IMediator {
   }
 }
 
-class MockTelemetry { start() {} end() {} error() {} }
+class MockTelemetry { start() {} recordSuccess() {} recordFailure() {} }
 class MockRateLimiter { async checkLimit() { return true; } }
 class MockAuthGuard { async authorize() { return true; } }
 class MockIdempotency { async isDuplicate() { return false; } }

@@ -50,7 +50,7 @@ export async function createAccount(input: {
   if (!workspaceId) return { ok: false as const, error: 'WORKSPACE_REQUIRED' };
 
   try {
-    const cmd = new CreateAccountCommand(input.name, input.currency_code || 'VND', Math.round((input.balance ?? 0) * 100), workspaceId as string, user.id);
+    const cmd = new CreateAccountCommand(input.name, input.currency_code || 'VND', input.balance ?? 0, workspaceId as string, user.id);
     const result = await actionExecutor.execute(cmd, {} as any, { name: 'Action', roles: [], tier: 'Standard' as any, mapToCommand: () => cmd });
     
     if ((result as any)?.code) return { ok: false as const, error: (result as any).detail };

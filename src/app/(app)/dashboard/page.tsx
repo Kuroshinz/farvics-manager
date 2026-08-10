@@ -1,10 +1,18 @@
-import * as React from 'react';
-import { PageHeader } from '../../../components/layouts/AppShell/PageHeader';
-import { KPIGrid } from '../../../components/dashboard/KPIGrid';
-import { CashflowChart } from '../../../components/dashboard/CashflowChart';
-import { TransactionTable } from '../../../components/dashboard/TransactionTable';
-import { ReportHub } from '../../../components/dashboard/ReportHub';
-import { fetchTransactions, fetchAccounts } from '../../actions/financial-queries';
+import dynamic from 'next/dynamic';
+import { LoadingSkeleton } from '../../../components/ui/LoadingSkeleton';
+
+const KPIGrid = dynamic(() => import('../../../components/dashboard/KPIGrid'), {
+  loading: () => <LoadingSkeleton height="120px" className="mb-4" />,
+});
+const CashflowChart = dynamic(() => import('../../../components/dashboard/CashflowChart'), {
+  loading: () => <LoadingSkeleton height="300px" className="mb-4" />,
+});
+const TransactionTable = dynamic(() => import('../../../components/dashboard/TransactionTable'), {
+  loading: () => <LoadingSkeleton height="200px" className="mb-4" />,
+});
+const ReportHub = dynamic(() => import('../../../components/dashboard/ReportHub'), {
+  loading: () => <LoadingSkeleton height="150px" className="mb-4" />,
+});
 
 export default async function DashboardPage() {
   const [transactions, accounts] = await Promise.all([
@@ -27,7 +35,7 @@ export default async function DashboardPage() {
       desc: tx.description || 'N/A',
       type: isIncome ? 'Income' : 'Expense',
       category: tx.category_id || 'Uncategorized', // Should map to name later
-      amount: `${isIncome ? '+' : '-'}$${(Math.abs(tx.amount)/100).toLocaleString()}`,
+      amount: `${isIncome ? '+' : '-'}${Math.abs(tx.amount).toLocaleString()} đ`,
       status: tx.status || 'Completed'
     };
   });

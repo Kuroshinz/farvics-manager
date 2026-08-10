@@ -13,8 +13,8 @@ import { toast } from 'sonner';
 import { createTransaction, updateTransaction, deleteTransaction, archiveTransaction, restoreTransaction } from '../../actions/transactions';
 import { Typography } from '../../../components/ui/typography/Typography';
 import { useRouter } from 'next/navigation';
-
 import { CurrencyInput } from '../../../components/ui/form/CurrencyInput';
+import { createBrowserClient } from '@supabase/ssr';
 
 const schema = z.object({
   description: z.string().min(1, 'Mô tả không được để trống'),
@@ -29,6 +29,34 @@ const schema = z.object({
 export function TransactionsClient({ initialData, accounts, categories }: { initialData: any[], accounts: any[], categories: any[] }) {
   const router = useRouter();
   const [data, setData] = React.useState(initialData);
+
+  const supabase = React.useMemo(() => createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  ), []);
+
+  React.useEffect(() => {
+    const channel = supabase.channel('realtime:transactions')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'financial_journal_entries' },
+        (payload) => {
+          if (payload.eventType === 'INSERT') {
+            setData((prev) => [payload.new, ...prev]);
+          } else if (payload.eventType === 'DELETE') {
+            setData((prev) => prev.filter(item => item.id !== payload.old.id));
+          } else if (payload.eventType === 'UPDATE') {
+            setData((prev) => prev.map(item => item.id === payload.new.id ? payload.new : item));
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [supabase]);
+
   const [isDrawerOpen, setDrawerOpen] = React.useState(false);
   const [deleteItem, setDeleteItem] = React.useState<any>(null);
 

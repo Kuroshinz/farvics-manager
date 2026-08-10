@@ -2,16 +2,16 @@ import dynamic from 'next/dynamic';
 import { PageHeader } from '../../../components/layouts/AppShell/PageHeader';
 import { LoadingSkeleton } from '../../../components/ui/LoadingSkeleton';
 
-const KPIGrid = dynamic(() => import('../../../components/dashboard/KPIGrid'), {
+const KPIGrid = dynamic(() => import('../../../components/dashboard/KPIGrid').then(mod => mod.KPIGrid), {
   loading: () => <LoadingSkeleton height="120px" className="mb-4" />,
 });
-const CashflowChart = dynamic(() => import('../../../components/dashboard/CashflowChart'), {
+const CashflowChart = dynamic(() => import('../../../components/dashboard/CashflowChart').then(mod => mod.CashflowChart), {
   loading: () => <LoadingSkeleton height="300px" className="mb-4" />,
 });
-const TransactionTable = dynamic(() => import('../../../components/dashboard/TransactionTable'), {
+const TransactionTable = dynamic(() => import('../../../components/dashboard/TransactionTable').then(mod => mod.TransactionTable), {
   loading: () => <LoadingSkeleton height="200px" className="mb-4" />,
 });
-const ReportHub = dynamic(() => import('../../../components/dashboard/ReportHub'), {
+const ReportHub = dynamic(() => import('../../../components/dashboard/ReportHub').then(mod => mod.ReportHub), {
   loading: () => <LoadingSkeleton height="150px" className="mb-4" />,
 });
 

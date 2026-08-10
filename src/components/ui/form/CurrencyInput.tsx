@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { useController, Control } from 'react-hook-form';
+import { useController } from 'react-hook-form';
 
 interface CurrencyInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
-  control: Control<any>;
+  control: any;
   label?: string;
   error?: string;
 }

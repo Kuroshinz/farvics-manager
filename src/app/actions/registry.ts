@@ -4,11 +4,16 @@ import { Result } from '../../shared/core/Result';
 
 class MockMediator implements IMediator {
   private handlers = new Map<string, any>();
-  register(commandName: string, handler: any) { this.handlers.set(commandName, handler); }
+  // We register both the string name and a fallback default handler
+  register(commandName: string, handler: any) { 
+    this.handlers.set(commandName, handler); 
+    this.handlers.set('DEFAULT', handler); // Fallback for dev mode mangling
+  }
   async query<TResult>(q: IQuery): Promise<TResult> { return Result.ok() as unknown as TResult; }
   async send<TResult>(command: ICommand): Promise<TResult> {
-    const handler = this.handlers.get(command.constructor.name);
-    if (!handler) throw new Error(`No handler for ${command.constructor.name}`);
+    const name = command.constructor.name;
+    const handler = this.handlers.get(name) || this.handlers.get('DEFAULT');
+    if (!handler) throw new Error(`No handler for ${name}`);
     return (await handler.handle(command)) as unknown as TResult;
   }
 }

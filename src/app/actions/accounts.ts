@@ -49,18 +49,25 @@ export async function createAccount(input: {
   
   if (!workspaceId) return { ok: false as const, error: 'WORKSPACE_REQUIRED' };
 
-  const cmd = new CreateAccountCommand(input.name, input.currency_code || 'VND', Math.round((input.balance ?? 0) * 100), workspaceId, user.id);
-  const result = await actionExecutor.execute(cmd, {} as any, { name: 'Action', roles: [], tier: 'Standard' as any, mapToCommand: () => cmd });
-  
-  if ((result as any)?.code) return { ok: false as const, error: (result as any).detail };
-  if ((result as any).isFailure) return { ok: false as const, error: (result as any).error };
-  
-  revalidatePath('/accounts');
-  
-  // Serialize the domain entity to a plain object to prevent Next.js Server Action serialization crashes
-  const plainData = JSON.parse(JSON.stringify((result as any).getValue()));
-  
-  return { ok: true as const, data: plainData };
+  try {
+    const cmd = new CreateAccountCommand(input.name, input.currency_code || 'VND', Math.round((input.balance ?? 0) * 100), workspaceId as string, user.id);
+    const result = await actionExecutor.execute(cmd, {} as any, { name: 'Action', roles: [], tier: 'Standard' as any, mapToCommand: () => cmd });
+    
+    if ((result as any)?.code) return { ok: false as const, error: (result as any).detail };
+    if ((result as any).isFailure) {
+      const errPayload = (result as any).error;
+      return { ok: false as const, error: errPayload?.message || JSON.stringify(errPayload) };
+    }
+    
+    revalidatePath('/accounts');
+    
+    // Serialize the domain entity to a plain object to prevent Next.js Server Action serialization crashes
+    const plainData = JSON.parse(JSON.stringify((result as any).getValue()));
+    
+    return { ok: true as const, data: plainData };
+  } catch (e: any) {
+    return { ok: false as const, error: `[SERVER_CRASH]: ${e?.message || JSON.stringify(e)}` };
+  }
 }
 
 export async function updateAccount(id: string, input: any) {

@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import { PageHeader } from '../../../components/layouts/AppShell/PageHeader';
 import { LoadingSkeleton } from '../../../components/ui/LoadingSkeleton';
 
 const KPIGrid = dynamic(() => import('../../../components/dashboard/KPIGrid'), {

@@ -4,7 +4,7 @@ import * as React from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { motion } from 'framer-motion';
 
-const data = [
+const defaultData = [
   { name: 'Jan', income: 12000, outcome: 4000 },
   { name: 'Feb', income: 15000, outcome: 6000 },
   { name: 'Mar', income: 17000, outcome: 5000 },
@@ -19,7 +19,7 @@ const data = [
   { name: 'Dec', income: 35000, outcome: 18000 },
 ];
 
-export function CashflowChart() {
+export function CashflowChart({ data = defaultData }: { data?: any[] }) {
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}

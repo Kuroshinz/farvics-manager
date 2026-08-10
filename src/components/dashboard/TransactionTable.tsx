@@ -2,7 +2,7 @@ import * as React from 'react';
 import { motion } from 'framer-motion';
 import { MoreHorizontal, Download, Filter, ArrowUpDown } from 'lucide-react';
 
-const mockTransactions = [
+const defaultTransactions = [
   { id: 1, date: '2025-11-10', desc: 'Payment from Acme Corp.', type: 'Income', category: 'Sales Revenue', amount: '+$1,250.00', status: 'Completed' },
   { id: 2, date: '2025-11-10', desc: 'Monthly Software Subscription', type: 'Expense', category: 'Software/SaaS', amount: '-$89.99', status: 'Schedule' },
   { id: 3, date: '2025-11-09', desc: 'Client Project Deposit (Phase 1)', type: 'Income', category: 'Sales Revenue', amount: '+$5,100.00', status: 'Pending' },
@@ -39,7 +39,7 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-export function TransactionTable() {
+export function TransactionTable({ transactions = defaultTransactions }: { transactions?: any[] }) {
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -70,7 +70,7 @@ export function TransactionTable() {
             </tr>
           </thead>
           <tbody className="text-sm text-white/80">
-            {mockTransactions.map((tx) => (
+            {transactions.map((tx) => (
               <tr key={tx.id} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors group">
                 <td className="py-4">{tx.date}</td>
                 <td className="py-4 text-white font-medium">{tx.desc}</td>

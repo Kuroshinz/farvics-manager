@@ -54,13 +54,13 @@ function KPICard({ title, value, change, isPositive, icon, isPrimary, delay = 0 
   );
 }
 
-export function KPIGrid() {
+export function KPIGrid({ data = { revenue: 2160000, saving: 1194000, expense: 1663000, net: 910000 } }: { data?: any }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-      <KPICard title="Total Revenue" value="$ 21,600" change="12.6 %" isPositive={true} icon={<DollarSign size={16} />} isPrimary={true} delay={0.1} />
-      <KPICard title="Total Saving" value="$ 11,940" change="-1.7 %" isPositive={false} icon={<PiggyBank size={16} />} delay={0.2} />
-      <KPICard title="Monthly Expense" value="$ 16,630" change="1.9 %" isPositive={true} icon={<CreditCard size={16} />} delay={0.3} />
-      <KPICard title="Net Income" value="$ 9,100" change="0.0 %" isPositive={true} icon={<Sparkles size={16} />} delay={0.4} />
+      <KPICard title="Total Revenue" value={`$ ${(data.revenue/100).toLocaleString()}`} change="12.6 %" isPositive={true} icon={<DollarSign size={16} />} isPrimary={true} delay={0.1} />
+      <KPICard title="Total Saving" value={`$ ${(data.saving/100).toLocaleString()}`} change="-1.7 %" isPositive={false} icon={<PiggyBank size={16} />} delay={0.2} />
+      <KPICard title="Monthly Expense" value={`$ ${(data.expense/100).toLocaleString()}`} change="1.9 %" isPositive={true} icon={<CreditCard size={16} />} delay={0.3} />
+      <KPICard title="Net Income" value={`$ ${(data.net/100).toLocaleString()}`} change="0.0 %" isPositive={true} icon={<Sparkles size={16} />} delay={0.4} />
     </div>
   );
 }

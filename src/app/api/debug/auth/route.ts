@@ -5,10 +5,9 @@ import dns from 'dns/promises';
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  // Temporary unlock for urgent production debugging
-  // if (process.env.NODE_ENV === 'production' && process.env.DEBUG_AUTH !== 'true') {
-  //   return NextResponse.json({ error: 'Endpoint disabled in production.' }, { status: 403 });
-  // }
+  if (process.env.NODE_ENV === 'production' && process.env.DEBUG_AUTH !== 'true') {
+    return NextResponse.json({ error: 'Endpoint disabled in production.' }, { status: 403 });
+  }
 
   const results: any = {
     environment: {},

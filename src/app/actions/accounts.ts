@@ -27,13 +27,19 @@ export async function createAccount(input: {
   status?: string;
   balance?: number;
 }) {
-  const cookieStore = cookies();
-  const workspaceId = getWorkspaceId(cookieStore);
-  if (!workspaceId) return { ok: false as const, error: 'WORKSPACE_REQUIRED' };
-
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { ok: false as const, error: 'UNAUTHENTICATED' };
+
+  const cookieStore = cookies();
+  let workspaceId = cookieStore.get('active_workspace_id')?.value;
+  
+  if (!workspaceId) {
+    const { data: ws } = await supabase.from('workspaces').select('id').eq('owner_id', user.id).limit(1).single();
+    if (ws) workspaceId = ws.id;
+  }
+  
+  if (!workspaceId) return { ok: false as const, error: 'WORKSPACE_REQUIRED' };
 
   const cmd = new CreateAccountCommand(input.name, input.currency_code || 'VND', Math.round((input.balance ?? 0) * 100), workspaceId, user.id);
   const result = await actionExecutor.execute(cmd, {} as any, { name: 'Action', roles: [], tier: 'Standard' as any, mapToCommand: () => cmd });

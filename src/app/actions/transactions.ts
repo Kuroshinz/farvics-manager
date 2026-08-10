@@ -18,13 +18,18 @@ export async function createTransaction(input: {
   reference?: string;
   status?: string;
 }) {
-  const cookieStore = cookies();
-  const workspaceId = getWorkspaceId(cookieStore);
-  if (!workspaceId) return { ok: false as const, error: 'WORKSPACE_REQUIRED' };
-
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { ok: false as const, error: 'UNAUTHENTICATED' };
+
+  const cookieStore = cookies();
+  let workspaceId = cookieStore.get('active_workspace_id')?.value;
+  
+  if (!workspaceId) {
+    const { data: ws } = await supabase.from('workspaces').select('id').eq('owner_id', user.id).limit(1).single();
+    if (ws) workspaceId = ws.id;
+  }
+  if (!workspaceId) return { ok: false as const, error: 'WORKSPACE_REQUIRED' };
 
   const txId = crypto.randomUUID();
   const payload = {

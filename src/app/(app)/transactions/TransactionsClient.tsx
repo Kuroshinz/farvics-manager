@@ -66,15 +66,20 @@ export function TransactionsClient({ initialData, accounts, categories }: { init
   });
 
   const onSubmit = async (vals: any) => {
-    const res = await createTransaction(vals);
-    if (res.ok) {
-      toast.success('Giao dịch đã được tạo');
-      setDrawerOpen(false);
-      reset();
-      router.refresh(); // Triggers Dashboard revalidation
-      setData([res.data, ...data]);
-    } else {
-      toast.error('Có lỗi xảy ra: ' + res.error);
+    try {
+      const res = await createTransaction(vals);
+      if (res.ok) {
+        toast.success('Giao dịch đã được tạo');
+        setDrawerOpen(false);
+        reset();
+        router.refresh(); // Triggers Dashboard revalidation
+        setData([res.data, ...data]);
+      } else {
+        toast.error('Có lỗi xảy ra: ' + res.error);
+      }
+    } catch (e: any) {
+      toast.error('Lỗi máy chủ: ' + (e?.message || 'Không thể kết nối'));
+      console.error(e);
     }
   };
 

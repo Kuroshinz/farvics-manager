@@ -62,15 +62,20 @@ export function AccountsClient({ initialData }: { initialData: any[] }) {
   });
 
   const onSubmit = async (vals: any) => {
-    const res = await createAccount(vals);
-    if (res.ok) {
-      toast.success('Tài khoản đã được tạo');
-      setDrawerOpen(false);
-      reset();
-      router.refresh();
-      setData([res.data, ...data]);
-    } else {
-      toast.error('Có lỗi xảy ra: ' + res.error);
+    try {
+      const res = await createAccount(vals);
+      if (res.ok) {
+        toast.success('Tài khoản đã được tạo');
+        setDrawerOpen(false);
+        reset();
+        router.refresh();
+        setData([res.data, ...data]);
+      } else {
+        toast.error('Có lỗi xảy ra: ' + res.error);
+      }
+    } catch (e: any) {
+      toast.error('Có lỗi xảy ra: Không thể kết nối tới máy chủ hoặc dữ liệu không hợp lệ. Vui lòng thử lại.');
+      console.error(e);
     }
   };
 

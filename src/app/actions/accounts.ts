@@ -35,13 +35,13 @@ export async function createAccount(input: {
   let workspaceId = cookieStore.get('active_workspace_id')?.value;
   
   if (!workspaceId) {
-    const { data: ws } = await supabase.from('workspaces').select('id').eq('owner_id', user.id).limit(1).single();
+    const { data: ws } = await supabase.from('workspaces').select('id').eq('created_by', user.id).limit(1).single();
     if (ws) {
       workspaceId = ws.id;
     } else {
       const newWsId = crypto.randomUUID();
-      await supabase.from('workspaces').insert({ id: newWsId, name: 'My Workspace', owner_id: user.id });
-      await supabase.from('workspace_members').insert({ id: crypto.randomUUID(), workspace_id: newWsId, user_id: user.id, role: 'owner' });
+      await supabase.from('workspaces').insert({ id: newWsId, name: 'My Workspace', created_by: user.id, tenant_id: newWsId });
+      await supabase.from('workspace_members').insert({ workspace_id: newWsId, user_id: user.id, role: 'owner', created_by: user.id, tenant_id: newWsId });
       workspaceId = newWsId;
     }
     cookieStore.set('active_workspace_id', workspaceId as string, { path: '/' });
